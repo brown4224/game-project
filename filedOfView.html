@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+
+<script id="light-shader" type="x-shader/x-vertex">
+uniform float shaderFlag;
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+varying vec4 fColor;
+uniform mat4 modelView;
+uniform mat4 projection;
+// Lighting
+uniform vec4 ambientProduct, diffuseProduct, specularProduct;
+uniform vec4 lightPosition;
+uniform float shininess;
+attribute  vec3 vNormal;
+void main()
+{
+    gl_Position = projection * modelView * vPosition;
+    fColor = vColor;
+
+    if (shaderFlag > 0.0){
+        vec3 light = lightPosition.xyz;
+        vec3 pos = -(modelView * vPosition).xyz;
+        vec3 L = normalize( light - pos );
+        vec3 E = normalize( -pos );
+        vec3 H = normalize( L + E );
+        vec4 NN = vec4(vNormal,0);
+        // Transform vertex normal into eye coordinates
+        vec3 N = normalize( (modelView*NN).xyz);
+        // Compute terms in the illumination equation
+        vec4 ambient = ambientProduct;
+        float Kd = max( dot(L, N), 0.0 );
+        vec4  diffuse = Kd*diffuseProduct;
+        float Ks = pow( max(dot(N, H), 0.0), shininess );
+        vec4  specular = Ks * specularProduct;
+        if( dot(L, N) < 0.0 ) {
+        specular = vec4(0.0, 0.0, 0.0, 1.0);
+        }
+        fColor = fColor * (ambient + diffuse +specular);
+        fColor.a = 1.0;
+    }
+}
+
+
+
+
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 fColor;
+void
+main()
+{
+    gl_FragColor = fColor;
+}
+
+
+
+
+</script>
+
+<script type="text/javascript" src="./Common/webgl-utils.js"></script>
+<script type="text/javascript" src="./Common/initShaders.js"></script>
+<script type="text/javascript" src="./Common/MV.js"></script>
+<script type="text/javascript" src="cube.js"></script>
+<script type="text/javascript" src="sphere.js"></script>
+<script type="text/javascript" src="cone.js"></script>
+<script type="text/javascript" src="renderOrder.js"></script>
+<script type="text/javascript" src="filedOfView.js"></script>
+
+<body>
+
+<div style="width: 100%">
+    <div style="float:left; width: 50%">
+
+        <canvas id="gl-canvas" width="900" height="900">
+            Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </div>
+    <div style="float:right;width: 50%">
+
+    </div>
+</div>
+</body>
+</html>
