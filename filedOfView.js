@@ -10,7 +10,6 @@ var random = 0;
 // Arrays
 var pointsArray = [];
 var normalsArray = [];
-
 var shapeArray = [];  // CUBE, SPHERE, CONE: [START, OFFset]
 var historyArray = [];
 var colorsArray = [];
@@ -18,6 +17,12 @@ var colorsArray = [];
 // Movement
 var axis = 0;
 var rotateAxis = [0.0, 0.0, 0.0]; //Theta X,Y,Z
+var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
+
+// Rotate
+var xAxis = 0;
+var yAxis = 0;
+var zAxis = 0;
 
 
 //   Perspective
@@ -44,10 +49,6 @@ var eye;
 const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
 
-// Rotate
-var xAxis = 0;
-var yAxis = 0;
-var zAxis = 0;
 
 // Lighting
 var ambientColor, diffuseColor, specularColor;
@@ -174,6 +175,54 @@ window.onload = function init() {
 
     }
 
+    ///////////////  Buttons   //////////////////////
+    document.onkeydown = checkKey;
+    function checkKey(e) {
+
+        var speed = 0.2;
+
+        e = e || window.event;
+
+        if (e.keyCode == '38') {  // up arrow
+            movementMatrix[2] += speed;
+            console.log('Arrow Key')
+        }
+        else if (e.keyCode == '40') {  // down arrow
+            movementMatrix[2] -= speed;
+        }
+        else if (e.keyCode == '37') {  // left arrow
+            movementMatrix[0] += speed;
+        }
+        else if (e.keyCode == '39') {  // right arrow
+            movementMatrix[0] -= speed;
+        }
+    }
+
+    var lastMouse = null;
+    var mouseSpeed = 0.05;
+    ///////////////  Mouse   //////////////////////
+    var gc = document.getElementById("gl-canvas");
+
+    /**
+     * This function move the "At" part of look at.
+     * The eye remains unchanged
+     */
+    gc.addEventListener("mousemove", function (event) {
+
+        if(lastMouse != null) {
+            if (event.pageX - lastMouse.pageX > 0){at[0] += mouseSpeed;}
+            if (event.pageX - lastMouse.pageX < 0){at[0] -= mouseSpeed;}
+            if (event.pageY - lastMouse.pageY > 0){at[1] += mouseSpeed;}
+            if (event.pageY - lastMouse.pageY < 0){at[1] -= mouseSpeed;}
+        }
+        lastMouse = event;
+    });
+
+    gc.addEventListener("mouseclick", function (event) {
+        // Do stuff
+    });
+
+
 
     render();
 };
@@ -236,6 +285,7 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
     // Look, Scale, Translate
     // Look: Resets the position for each object
     mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
+    mvMatrix = mult(mvMatrix, translate(movementMatrix));
     mvMatrix = mult(mvMatrix, translate(trans));
     if (axis[0])
         mvMatrix = mult(mvMatrix, rotateX(rotateAxis[xAxis]));
@@ -245,6 +295,8 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
         mvMatrix = mult(mvMatrix, rotateZ(rotateAxis[zAxis]));
 
     mvMatrix = mult(mvMatrix, translate(trans));
+
+
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
 
@@ -264,30 +316,12 @@ function shapeMapper(funk, startIndex) {
     shapeArray.push([startIndex, offset]);
 }
 
-// function randomAxis() {
-//     // var axis = Math.floor(Math.random() * 3);
-//     axis = random % 3;
-//     random++
-//     var ans;
-//     switch (axis) {
-//         case 0:
-//             ans = [true, false, false];
-//             break;
-//         case 1:
-//             ans = [false, true, false];
-//             break;
-//         case 2:
-//             ans = [false, false, true];
-//             break;
-//     }
-//     return ans;
-// }
 
 function inverse(array) {
-    if(array.length == 2)
+    if (array.length == 2)
         return vec2(-1 * array[0], -1 * array[1]);
-    else if(array.length == 3)
+    else if (array.length == 3)
         return vec3(-1 * array[0], -1 * array[1], -1 * array[2]);
-    else if(array.length == 4)
+    else if (array.length == 4)
         return vec4(-1 * array[0], -1 * array[1], -1 * array[2], array[3]);
 }

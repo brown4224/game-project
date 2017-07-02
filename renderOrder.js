@@ -20,7 +20,6 @@
 
 
 
-
 function renderOrder() {
     var defaultScale = vec3(1.0, 1.0, 1.0);
     var defaultTranslation = vec3(0.0, 0.0, 0.0);

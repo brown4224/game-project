@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 
 
 <script id="light-shader" type="x-shader/x-vertex">
@@ -60,7 +60,6 @@ main()
 
 
 </script>
-
 <script type="text/javascript" src="./Common/webgl-utils.js"></script>
 <script type="text/javascript" src="./Common/initShaders.js"></script>
 <script type="text/javascript" src="./Common/MV.js"></script>
@@ -68,16 +67,22 @@ main()
 <script type="text/javascript" src="sphere.js"></script>
 <script type="text/javascript" src="cone.js"></script>
 <script type="text/javascript" src="renderOrder.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 <script type="text/javascript" src="filedOfView.js"></script>
 
 <body>
 
 <div style="width: 100%">
     <div style="float:left; width: 50%">
+        <div id="centerpoint">
+            <div id="dialog">
+                <canvas id="gl-canvas" width="900" height="900">
+                    Oops ... your browser doesn't support the HTML5 canvas element
+                </canvas>
+            </div>
+        </div>
 
-        <canvas id="gl-canvas" width="900" height="900">
-            Oops ... your browser doesn't support the HTML5 canvas element
-        </canvas>
+
     </div>
     <div style="float:right;width: 50%">
 
