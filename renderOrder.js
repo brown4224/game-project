@@ -24,8 +24,8 @@ function renderOrder() {
     var defaultScale = vec3(1.0, 1.0, 1.0);
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
-    var bounds = 3;
-    var maxObjects = 10;
+    var bounds = 10;
+    var maxObjects = 50;
 
     ///////////////  HERO OBJECT   //////////////////////
     var heroScale = vec3(0.75, 0.75, 0.75);
@@ -35,11 +35,18 @@ function renderOrder() {
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
         var shape = randomNumber(3, 0, false);
-        var x = randomNumber(bounds, 1, true);
-        var y = 0;
-        var z = randomNumber(bounds, 1, true);
-        var translation = vec3(x, y, z);
-        historyArray.push([shapeArray[shape], true, defaultScale, translation, defaultRotation]);
+        var trans;
+        var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+
+        // Make half of the objects move
+        if(i%2 == 0){
+            var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+            trans = [translation, translationSecond];
+        } else {
+            trans = [translation, defaultTranslation];
+        }
+
+        historyArray.push([shapeArray[shape], true, defaultScale, trans, defaultRotation]);
     }
 }
 

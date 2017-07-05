@@ -16,20 +16,11 @@ var hero = [];
 var colorsArray = [];
 
 // Movement
-var axis = 0;
-// var rotateAxis = [0.0, 0.0, 0.0]; //Theta X,Y,Z
-var rotateHero = [0.0, 0.0, 0.0];
-
 var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
 
-// Rotate
-var xAxis = 0;
-var yAxis = 0;
-var zAxis = 0;
-// Hero Rotation
-var hxAxis = 0;
-var hyAxis = 0;
-var hzAxis = 0;
+// Rotate  Variables
+var xAxis = 0; var yAxis = 0; var zAxis = 0;  // Global
+var hxAxis = 0; var hyAxis = 0; var hzAxis = 0;  // Hero Rotation
 
 
 //   Perspective
@@ -52,12 +43,9 @@ var projection;
 
 // Eye
 var look;
-// var eye = vec3(0.0, 0.0, 5.0);
-
 var eye;
 const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
-
 
 // Lighting
 var ambientColor, diffuseColor, specularColor;
@@ -76,13 +64,6 @@ var materialAmbient = vec4(1.0, 1.0, 1.0, 1.0);
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 var materialShininess = 100.0;
-
-// Default Spheres
-var sphereScale = [];
-var sphereTranslate = [];
-var sphereRotate = [];
-var sphereSelect = 0;
-
 
 // Color
 var vertexColors = [
@@ -194,60 +175,40 @@ window.onload = function init() {
         e = e || window.event;
 
         if (e.keyCode == '38') {  // up arrow
+            // Movement
             movementMatrix[0] += speed * Math.sin(theta);
             movementMatrix[2] += speed *  Math.cos(theta);
-
-
-            // Reverse X and Z from eye equation
+            // Object Rotation
             hzAxis += rspeed *  Math.sin(theta);
             hxAxis += rspeed *  Math.cos(theta);
         }
         else if (e.keyCode == '40') {  // down arrow
+            // Movement
             movementMatrix[0] -= speed * Math.sin(theta);
             movementMatrix[2] -= speed *  Math.cos(theta);
-            // Reverse X and Z from eye equation
+            // Object Rotation
             hzAxis -= rspeed *  Math.sin(theta);
             hxAxis -= rspeed *  Math.cos(theta);
         }
         else if (e.keyCode == '37') {  // left arrow
-            // movementMatrix[0] += speed;
-            // at[0] += speed;
-            theta -= dr;
-        }
-        else if (e.keyCode == '39') {  // right arrow
-            // movementMatrix[0] -= speed;
-            // at[0] -= speed;
             theta += dr;
         }
-    }
-    document.onkeyup = keyup;
-    function keyup(e) {
-        hero[4] = stopRotation();
-    }
-
-    function stopRotation() {
-        return [false, false, false];
+        else if (e.keyCode == '39') {  // right arrow
+            theta -= dr;
+        }
     }
 
-    var lastMouse = null;
-    var mouseSpeed = 0.05;
+
     ///////////////  Mouse   //////////////////////
     var gc = document.getElementById("gl-canvas");
 
-    // /**
-    //  * This function move the "At" part of look at.
-    //  * The eye remains unchanged
-    //  */
-    // gc.addEventListener("mousemove", function (event) {
-    //
-    //     if(lastMouse != null) {
-    //         if (event.pageX - lastMouse.pageX > 0){at[0] += mouseSpeed;}
-    //         if (event.pageX - lastMouse.pageX < 0){at[0] -= mouseSpeed;}
-    //         if (event.pageY - lastMouse.pageY > 0){at[1] += mouseSpeed;}
-    //         if (event.pageY - lastMouse.pageY < 0){at[1] -= mouseSpeed;}
-    //     }
-    //     lastMouse = event;
-    // });
+    /**
+     * This function move the "At" part of look at.
+     * The eye remains unchanged
+     */
+    gc.addEventListener("mousemove", function (event) {
+        // Do stuff
+    });
 
     gc.addEventListener("mouseclick", function (event) {
         // Do stuff
@@ -331,7 +292,7 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
     // Look: Resets the position for each object
     mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
     mvMatrix = mult(mvMatrix, translate(movementMatrix));
-    mvMatrix = mult(mvMatrix, translate(trans));
+    mvMatrix = mult(mvMatrix, translate(trans[0]));
     if (axis[0])
         mvMatrix = mult(mvMatrix, rotateX(xAxis));
     if (axis[1])
@@ -339,14 +300,11 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
     if (axis[2])
         mvMatrix = mult(mvMatrix, rotateZ(zAxis));
 
-    // mvMatrix = mult(mvMatrix, translate(trans));
-
-
-    /////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////
-
-
+    mvMatrix = mult(mvMatrix, translate(trans[1]));
     letsRender(indexArray, flagValue, mvMatrix, pMatrix);
+
+    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
 }
 
 function letsRender(indexArray, flagValue, mvMatrix, pMatrix) {
@@ -363,14 +321,4 @@ function shapeMapper(funk, startIndex) {
     funk();
     var offset = pointsArray.length - startIndex;
     shapeArray.push([startIndex, offset]);
-}
-
-
-function inverse(array) {
-    if (array.length == 2)
-        return vec2(-1 * array[0], -1 * array[1]);
-    else if (array.length == 3)
-        return vec3(-1 * array[0], -1 * array[1], -1 * array[2]);
-    else if (array.length == 4)
-        return vec4(-1 * array[0], -1 * array[1], -1 * array[2], array[3]);
 }
