@@ -25,8 +25,14 @@ function renderOrder() {
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
     var bounds = 3;
-    var maxObjects = 50;
+    var maxObjects = 10;
 
+    ///////////////  HERO OBJECT   //////////////////////
+    var heroScale = vec3(0.75, 0.75, 0.75);
+    var heroPosition = at;
+    hero =[shapeArray[1], true, heroScale, at];
+
+    ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
         var shape = randomNumber(3, 0, false);
         var x = randomNumber(bounds, 1, true);

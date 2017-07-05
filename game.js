@@ -12,24 +12,31 @@ var pointsArray = [];
 var normalsArray = [];
 var shapeArray = [];  // CUBE, SPHERE, CONE: [START, OFFset]
 var historyArray = [];
+var hero = [];
 var colorsArray = [];
 
 // Movement
 var axis = 0;
-var rotateAxis = [0.0, 0.0, 0.0]; //Theta X,Y,Z
+// var rotateAxis = [0.0, 0.0, 0.0]; //Theta X,Y,Z
+var rotateHero = [0.0, 0.0, 0.0];
+
 var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
 
 // Rotate
 var xAxis = 0;
 var yAxis = 0;
 var zAxis = 0;
+// Hero Rotation
+var hxAxis = 0;
+var hyAxis = 0;
+var hzAxis = 0;
 
 
 //   Perspective
-var near = 0.1;
+var near = 0.001;
 var far = 30.0;
-var radius = 12.0;
-var theta = 0.0;
+var radius = 5.0;
+var theta = 0;  // Radians
 var phi = 0.0;
 var dr = 10.0 * Math.PI / 180.0;
 
@@ -45,6 +52,8 @@ var projection;
 
 // Eye
 var look;
+// var eye = vec3(0.0, 0.0, 5.0);
+
 var eye;
 const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
@@ -176,26 +185,48 @@ window.onload = function init() {
     }
 
     ///////////////  Buttons   //////////////////////
-    document.onkeydown = checkKey;
-    function checkKey(e) {
+    document.onkeydown = keydown;
+    function keydown(e) {
 
-        var speed = 0.2;
+        var speed = 0.3;
+        var rspeed =50 * speed;
 
         e = e || window.event;
 
         if (e.keyCode == '38') {  // up arrow
-            movementMatrix[2] += speed;
-            console.log('Arrow Key')
+            movementMatrix[0] += speed * Math.sin(theta);
+            movementMatrix[2] += speed *  Math.cos(theta);
+
+
+            // Reverse X and Z from eye equation
+            hzAxis += rspeed *  Math.sin(theta);
+            hxAxis += rspeed *  Math.cos(theta);
         }
         else if (e.keyCode == '40') {  // down arrow
-            movementMatrix[2] -= speed;
+            movementMatrix[0] -= speed * Math.sin(theta);
+            movementMatrix[2] -= speed *  Math.cos(theta);
+            // Reverse X and Z from eye equation
+            hzAxis -= rspeed *  Math.sin(theta);
+            hxAxis -= rspeed *  Math.cos(theta);
         }
         else if (e.keyCode == '37') {  // left arrow
-            movementMatrix[0] += speed;
+            // movementMatrix[0] += speed;
+            // at[0] += speed;
+            theta -= dr;
         }
         else if (e.keyCode == '39') {  // right arrow
-            movementMatrix[0] -= speed;
+            // movementMatrix[0] -= speed;
+            // at[0] -= speed;
+            theta += dr;
         }
+    }
+    document.onkeyup = keyup;
+    function keyup(e) {
+        hero[4] = stopRotation();
+    }
+
+    function stopRotation() {
+        return [false, false, false];
     }
 
     var lastMouse = null;
@@ -203,20 +234,20 @@ window.onload = function init() {
     ///////////////  Mouse   //////////////////////
     var gc = document.getElementById("gl-canvas");
 
-    /**
-     * This function move the "At" part of look at.
-     * The eye remains unchanged
-     */
-    gc.addEventListener("mousemove", function (event) {
-
-        if(lastMouse != null) {
-            if (event.pageX - lastMouse.pageX > 0){at[0] += mouseSpeed;}
-            if (event.pageX - lastMouse.pageX < 0){at[0] -= mouseSpeed;}
-            if (event.pageY - lastMouse.pageY > 0){at[1] += mouseSpeed;}
-            if (event.pageY - lastMouse.pageY < 0){at[1] -= mouseSpeed;}
-        }
-        lastMouse = event;
-    });
+    // /**
+    //  * This function move the "At" part of look at.
+    //  * The eye remains unchanged
+    //  */
+    // gc.addEventListener("mousemove", function (event) {
+    //
+    //     if(lastMouse != null) {
+    //         if (event.pageX - lastMouse.pageX > 0){at[0] += mouseSpeed;}
+    //         if (event.pageX - lastMouse.pageX < 0){at[0] -= mouseSpeed;}
+    //         if (event.pageY - lastMouse.pageY > 0){at[1] += mouseSpeed;}
+    //         if (event.pageY - lastMouse.pageY < 0){at[1] -= mouseSpeed;}
+    //     }
+    //     lastMouse = event;
+    // });
 
     gc.addEventListener("mouseclick", function (event) {
         // Do stuff
@@ -237,9 +268,9 @@ var render = function () {
     pMatrix = perspective(fovy, aspect, near, far);
 
     // Rotation  Speed
-    rotateAxis[xAxis] += 0.5; // x axis
-    rotateAxis[yAxis] += 0.5;  // y axis
-    rotateAxis[zAxis] += 0.5;  // z axis
+    xAxis += 0.5; // x axis
+    yAxis += 0.5;  // y axis
+    zAxis += 0.5;  // z axis
 
 
     ///////////////  Render Objects   //////////////////////
@@ -262,6 +293,20 @@ var render = function () {
      *                  Each axis can rotate at different speeds.
      *                  This flag determine which axis will be rotated.
      */
+
+
+
+
+        // Hero Object
+    mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
+    mvMatrix = mult(mvMatrix, translate(hero[3]));
+    mvMatrix = mult(mvMatrix, rotateX(hxAxis));
+    mvMatrix = mult(mvMatrix, rotateY(hyAxis));
+    mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
+    letsRender(hero[0], hero[1], mvMatrix, pMatrix);
+
+
+    // // Random Object
     var size = historyArray.length;
     for (var i = 0; i < size; i++) {
         var arr = historyArray[i];
@@ -288,19 +333,23 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
     mvMatrix = mult(mvMatrix, translate(movementMatrix));
     mvMatrix = mult(mvMatrix, translate(trans));
     if (axis[0])
-        mvMatrix = mult(mvMatrix, rotateX(rotateAxis[xAxis]));
+        mvMatrix = mult(mvMatrix, rotateX(xAxis));
     if (axis[1])
-        mvMatrix = mult(mvMatrix, rotateY(rotateAxis[yAxis]));
+        mvMatrix = mult(mvMatrix, rotateY(yAxis));
     if (axis[2])
-        mvMatrix = mult(mvMatrix, rotateZ(rotateAxis[zAxis]));
+        mvMatrix = mult(mvMatrix, rotateZ(zAxis));
 
-    mvMatrix = mult(mvMatrix, translate(trans));
+    // mvMatrix = mult(mvMatrix, translate(trans));
 
 
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////
 
 
+    letsRender(indexArray, flagValue, mvMatrix, pMatrix);
+}
+
+function letsRender(indexArray, flagValue, mvMatrix, pMatrix) {
     // All that work:  Lets Render!
     gl.uniform1f(gl.getUniformLocation(program, "shaderFlag"), flagValue);
     gl.uniformMatrix4fv(modelView, false, flatten(mvMatrix));
