@@ -270,21 +270,20 @@ var render = function () {
 
 
 
-        // Hero Object
+    // Hero Object
     mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
     mvMatrix = mult(mvMatrix, translate(hero[3]));
     mvMatrix = mult(mvMatrix, rotateX(hxAxis));
     mvMatrix = mult(mvMatrix, rotateY(hyAxis));
     mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
 
-    // AABB
-    // heroPosition = aabb_currentPosition(1, vec4( hero[3][0], hero[3][1], hero[3][2], 1.0   ) );
-    var newMatrix = mat4();
-    newMatrix = mult(newMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
-    newMatrix = mult(newMatrix, translate(hero[3]));
+    ////////////////////    AABB    //////////////////////////////
+    var aabb_matrix = mat4();
+    aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
+    aabb_matrix = mult(aabb_matrix, translate(hero[3]));
+    heroPosition = aabb_currentPosition(hero[0], aabb_matrix );
 
 
-    heroPosition = aabb_currentPosition(hero[0], newMatrix );
     console.log("Hero Position");
     console.log(heroPosition);
 
@@ -327,21 +326,24 @@ function renderObject( shape, flag, scaler, trans, axis) {
 
     mvMatrix = mult(mvMatrix, translate(trans[1]));
 
+    ////////////////////    AABB    //////////////////////////////
     // AABB  - Set Flag.  Use in key down
-    // var position = aabb_currentPosition(shape, vec4(trans[0], trans[1], trans[2], 1.0) );
-    var newMatrix = mat4();
-    newMatrix = mult(newMatrix, scalem(scaler[0], scaler[1], scaler[2]));
-    newMatrix = mult(newMatrix, translate(movementMatrix));
-    newMatrix = mult(newMatrix, translate(trans[0]));
-    var position = aabb_currentPosition(shape, newMatrix );
+    var position = aabb_currentPosition(shape, vec4(trans[0], trans[1], trans[2], 1.0) );
+    var aabb_matrix = mat4();
+    aabb_matrix = mult(aabb_matrix, scalem(scaler[0], scaler[1], scaler[2]));
+    aabb_matrix = mult(aabb_matrix, translate(movementMatrix));
+    aabb_matrix = mult(aabb_matrix, translate(trans[0]));
+    aabb_matrix = mult(aabb_matrix, translate(trans[1]));
+    var position = aabb_currentPosition(shape, aabb_matrix );
+
+
+    ////////////////////    AABB  COLLITION   //////////////////////////////
     collision = aabb_detection(heroPosition, position);
 
 
     console.log("Random Object Position");
     console.log(position);
 
-    // console.log("Colition Detected");
-    // console.log(collision);
 
     letsRender(shapeArray[shape], flagValue, mvMatrix, pMatrix);
 

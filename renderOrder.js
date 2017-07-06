@@ -25,8 +25,8 @@ function renderOrder() {
     var defaultScale = vec3(1.0, 1.0, 1.0);
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
-    var bounds = 3;
-    var maxObjects = 1;
+    var bounds = 10;
+    var maxObjects = 2;
 
     ///////////////  HERO OBJECT   //////////////////////
     shape = 1;
@@ -37,18 +37,17 @@ function renderOrder() {
 
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
-        shape = randomNumber(1, 0, false);
+        shape = randomNumber(3, 0, false);
         var trans;
-        var translation = vec3(2, 0, 0);
-        // var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+        var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
 
         // Make half of the objects move
         // if(i%2 == 0){
         //     var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
         //     trans = [translation, translationSecond];
         // } else {
-            // Make half static
-            trans = [translation, defaultTranslation];
+        // Make half static
+        trans = [translation, defaultTranslation];
         // }
 
         historyArray.push([  shape, true, defaultScale, trans, defaultRotation  ]);
