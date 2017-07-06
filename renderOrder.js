@@ -21,32 +21,37 @@
 
 
 function renderOrder() {
+    var shape;
     var defaultScale = vec3(1.0, 1.0, 1.0);
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
-    var bounds = 10;
-    var maxObjects = 50;
+    var bounds = 3;
+    var maxObjects = 1;
 
     ///////////////  HERO OBJECT   //////////////////////
-    var heroScale = vec3(0.75, 0.75, 0.75);
-    var heroPosition = at;
-    hero =[shapeArray[1], true, heroScale, at];
+    shape = 1;
+    var heroScale = defaultScale;
+    // var heroScale = vec3(0.75, 0.75, 0.75);
+    var heroPosition = vec3(0,0,0);
+    hero =[  shape, true, heroScale, heroPosition  ];
 
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
-        var shape = randomNumber(3, 0, false);
+        shape = randomNumber(1, 0, false);
         var trans;
-        var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+        var translation = vec3(2, 0, 0);
+        // var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
 
         // Make half of the objects move
-        if(i%2 == 0){
-            var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
-            trans = [translation, translationSecond];
-        } else {
+        // if(i%2 == 0){
+        //     var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+        //     trans = [translation, translationSecond];
+        // } else {
+            // Make half static
             trans = [translation, defaultTranslation];
-        }
+        // }
 
-        historyArray.push([shapeArray[shape], true, defaultScale, trans, defaultRotation]);
+        historyArray.push([  shape, true, defaultScale, trans, defaultRotation  ]);
     }
 }
 

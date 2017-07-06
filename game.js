@@ -7,6 +7,11 @@ var flag = true;
 var debug = false;
 var random = 0;
 
+//AABB
+var heroPosition;
+var collision = false;  // If hero runs into object
+
+
 // Arrays
 var pointsArray = [];
 var normalsArray = [];
@@ -103,6 +108,7 @@ window.onload = function init() {
     shapeMapper(drawCube, pointsArray.length);
     shapeMapper(drawSphere, pointsArray.length);
     shapeMapper(drawCone, pointsArray.length);
+    aabb_INIT();
     /////////////////  PREPARE FOR RENDERING   //////////////////////
     renderOrder();
     ///////////////////////////////////////////////////////////////////////////////////
@@ -176,19 +182,25 @@ window.onload = function init() {
 
         if (e.keyCode == '38') {  // up arrow
             // Movement
-            movementMatrix[0] += speed * Math.sin(theta);
-            movementMatrix[2] += speed *  Math.cos(theta);
-            // Object Rotation
-            hzAxis += rspeed *  Math.sin(theta);
-            hxAxis += rspeed *  Math.cos(theta);
+            if(!collision){
+                movementMatrix[0] += speed * Math.sin(theta);
+                movementMatrix[2] += speed *  Math.cos(theta);
+                // Object Rotation
+                hzAxis += rspeed *  Math.sin(theta);
+                hxAxis += rspeed *  Math.cos(theta);
+            }
+
         }
         else if (e.keyCode == '40') {  // down arrow
-            // Movement
-            movementMatrix[0] -= speed * Math.sin(theta);
-            movementMatrix[2] -= speed *  Math.cos(theta);
-            // Object Rotation
-            hzAxis -= rspeed *  Math.sin(theta);
-            hxAxis -= rspeed *  Math.cos(theta);
+            if(!collision){
+                // Movement
+                movementMatrix[0] -= speed * Math.sin(theta);
+                movementMatrix[2] -= speed *  Math.cos(theta);
+                // Object Rotation
+                hzAxis -= rspeed *  Math.sin(theta);
+                hxAxis -= rspeed *  Math.cos(theta);
+            }
+
         }
         else if (e.keyCode == '37') {  // left arrow
             theta += dr;
@@ -264,7 +276,20 @@ var render = function () {
     mvMatrix = mult(mvMatrix, rotateX(hxAxis));
     mvMatrix = mult(mvMatrix, rotateY(hyAxis));
     mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
-    letsRender(hero[0], hero[1], mvMatrix, pMatrix);
+
+    // AABB
+    // heroPosition = aabb_currentPosition(1, vec4( hero[3][0], hero[3][1], hero[3][2], 1.0   ) );
+    var newMatrix = mat4();
+    newMatrix = mult(newMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
+    newMatrix = mult(newMatrix, translate(hero[3]));
+
+
+    heroPosition = aabb_currentPosition(hero[0], newMatrix );
+    console.log("Hero Position");
+    console.log(heroPosition);
+
+
+    letsRender(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix);
 
 
     // // Random Object
@@ -278,7 +303,7 @@ var render = function () {
     requestAnimFrame(render);
 };
 
-function renderObject(indexArray, flag, scaler, trans, axis) {
+function renderObject( shape, flag, scaler, trans, axis) {
     // False: Use Vertex Shader
     // True: Use Light Shader
     // Flag is passed into the shader as a float
@@ -301,7 +326,24 @@ function renderObject(indexArray, flag, scaler, trans, axis) {
         mvMatrix = mult(mvMatrix, rotateZ(zAxis));
 
     mvMatrix = mult(mvMatrix, translate(trans[1]));
-    letsRender(indexArray, flagValue, mvMatrix, pMatrix);
+
+    // AABB  - Set Flag.  Use in key down
+    // var position = aabb_currentPosition(shape, vec4(trans[0], trans[1], trans[2], 1.0) );
+    var newMatrix = mat4();
+    newMatrix = mult(newMatrix, scalem(scaler[0], scaler[1], scaler[2]));
+    newMatrix = mult(newMatrix, translate(movementMatrix));
+    newMatrix = mult(newMatrix, translate(trans[0]));
+    var position = aabb_currentPosition(shape, newMatrix );
+    collision = aabb_detection(heroPosition, position);
+
+
+    console.log("Random Object Position");
+    console.log(position);
+
+    // console.log("Colition Detected");
+    // console.log(collision);
+
+    letsRender(shapeArray[shape], flagValue, mvMatrix, pMatrix);
 
     /////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////

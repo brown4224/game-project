@@ -5,6 +5,10 @@ var s_radius = 0.5;
 var s_color = 0;
 
 function drawSphere() {
+
+    // Set AABB points
+    aabbSphere = s_radius;
+
 // Generate Points
     for(var latNumber = 0; latNumber <= s_latitudeBands; latNumber++){
         var s_theta = latNumber * Math.PI / s_latitudeBands;
