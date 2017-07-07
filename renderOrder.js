@@ -18,7 +18,7 @@
  *                  This flag determine which axis will be rotated.
  */
 
-var maxObjects = 20;
+var maxObjects = 5;
 
 function renderOrder() {
     var shape;
@@ -29,8 +29,8 @@ function renderOrder() {
 
 
     ///////////////  HERO OBJECT   //////////////////////
-    shape = 1;
-    var heroScale = vec3(0.5, 0.5, 0.5);
+    shape = 3;
+    // var heroScale = vec3(0.5, 0.5, 0.5);
     var heroPosition = vec3(0,0,0);
     hero =[  shape, true, defaultScale, heroPosition  ];
 

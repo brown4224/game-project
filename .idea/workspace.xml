@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d54858f9-d36e-4b34-a82d-35eddd4c4990" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/webgl-obj-loader.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/objects/car.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/objects/cool-car-complete.obj" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cone.js" afterPath="$PROJECT_DIR$/objects/cone.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cube.js" afterPath="$PROJECT_DIR$/objects/cube.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/sphere.js" afterPath="$PROJECT_DIR$/objects/sphere.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/objects/car.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aabb.js" afterPath="$PROJECT_DIR$/aabb.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.html" afterPath="$PROJECT_DIR$/game.html" />
@@ -29,76 +24,60 @@
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.37230214">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-          <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/game.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="400">
-                  <caret line="328" column="23" lean-forward="false" selection-start-line="328" selection-start-column="23" selection-end-line="328" selection-end-column="23" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="cube.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/objects/cube.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="909">
-                  <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="game.html" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/game.html">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="100">
-                  <caret line="34" column="41" lean-forward="false" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="renderOrder.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/renderOrder.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="500">
-                  <caret line="20" column="18" lean-forward="false" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="aabb.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/aabb.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="600">
-                  <caret line="141" column="8" lean-forward="false" selection-start-line="141" selection-start-column="8" selection-end-line="141" selection-end-column="8" />
-                  <folding>
-                    <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
-                    <element signature="e#911#1346#0" expanded="false" />
-                    <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
-                    <element signature="n#!!block;n#aabb_boundingBoxCone#0" expanded="false" />
-                    <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
-                    <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
-                    <element signature="e#3035#3049#0" expanded="false" />
-                    <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
-                    <element signature="e#4341#4466#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
+      <file leaf-file-name="renderOrder.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/renderOrder.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="550">
+              <caret line="49" column="9" lean-forward="true" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="game.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="589">
+              <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+              <folding>
+                <element signature="e#7573#8663#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="car.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/objects/car.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="21" column="49" lean-forward="false" selection-start-line="21" selection-start-column="49" selection-end-line="21" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="cube.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/objects/cube.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="909">
+              <caret line="57" column="0" lean-forward="false" selection-start-line="57" selection-start-column="0" selection-end-line="57" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="game.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/game.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="66" column="50" lean-forward="false" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -123,10 +102,11 @@
         <option value="$PROJECT_DIR$/objects/car.obj" />
         <option value="$PROJECT_DIR$/objects/car.html" />
         <option value="$PROJECT_DIR$/lib/webgl-obj-loader.js" />
-        <option value="$PROJECT_DIR$/game.html" />
-        <option value="$PROJECT_DIR$/renderOrder.js" />
-        <option value="$PROJECT_DIR$/game.js" />
         <option value="$PROJECT_DIR$/aabb.js" />
+        <option value="$PROJECT_DIR$/renderOrder.js" />
+        <option value="$PROJECT_DIR$/game.html" />
+        <option value="$PROJECT_DIR$/game.js" />
+        <option value="$PROJECT_DIR$/objects/car.js" />
       </list>
     </option>
   </component>
@@ -297,18 +277,18 @@
       <workItem from="1499269358933" duration="29637000" />
       <workItem from="1499375200183" duration="457000" />
       <workItem from="1499383299967" duration="2246000" />
-      <workItem from="1499440526758" duration="20010000" />
+      <workItem from="1499440526758" duration="28679000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="79650000" />
+    <option name="totallyTimeSpent" value="88319000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="1942" height="1102" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11511936" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.60742706" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -371,14 +351,14 @@
           <caret line="100" column="36" lean-forward="false" selection-start-line="100" selection-start-column="36" selection-end-line="100" selection-end-column="36" />
           <folding>
             <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
-            <element signature="e#911#1346#0" expanded="false" />
+            <element signature="e#969#1404#0" expanded="false" />
             <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
             <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
             <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
-            <element signature="e#3035#3049#0" expanded="false" />
+            <element signature="e#3465#3479#0" expanded="false" />
             <element signature="n#!!block;n#aabb_distance_detection#0" expanded="false" />
             <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
-            <element signature="e#4341#4466#0" expanded="false" />
+            <element signature="e#4674#4799#0" expanded="false" />
             <element signature="n#!!block;n#maxValue#0" expanded="false" />
           </folding>
         </state>
@@ -448,14 +428,14 @@
           <caret line="8" column="59" lean-forward="false" selection-start-line="8" selection-start-column="59" selection-end-line="8" selection-end-column="59" />
           <folding>
             <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
-            <element signature="e#911#1346#0" expanded="false" />
+            <element signature="e#969#1404#0" expanded="false" />
             <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
             <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
             <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
-            <element signature="e#3035#3049#0" expanded="false" />
+            <element signature="e#3465#3479#0" expanded="false" />
             <element signature="n#!!block;n#aabb_distance_detection#0" expanded="false" />
             <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
-            <element signature="e#4341#4466#0" expanded="false" />
+            <element signature="e#4674#4799#0" expanded="false" />
             <element signature="n#!!block;n#maxValue#0" expanded="false" />
           </folding>
         </state>
@@ -525,14 +505,14 @@
           <caret line="8" column="59" lean-forward="false" selection-start-line="8" selection-start-column="59" selection-end-line="8" selection-end-column="59" />
           <folding>
             <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
-            <element signature="e#911#1346#0" expanded="false" />
+            <element signature="e#969#1404#0" expanded="false" />
             <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
             <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
             <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
-            <element signature="e#3035#3049#0" expanded="false" />
+            <element signature="e#3465#3479#0" expanded="false" />
             <element signature="n#!!block;n#aabb_distance_detection#0" expanded="false" />
             <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
-            <element signature="e#4341#4466#0" expanded="false" />
+            <element signature="e#4674#4799#0" expanded="false" />
             <element signature="n#!!block;n#maxValue#0" expanded="false" />
           </folding>
         </state>
@@ -724,22 +704,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/webgl-obj-loader.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="96" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/objects/sphere.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="74" column="29" lean-forward="true" selection-start-line="74" selection-start-column="29" selection-end-line="74" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/objects/cool-car-complete.obj">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -748,10 +712,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/game.html">
+    <entry file="file://$PROJECT_DIR$/aabb.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="34" column="41" lean-forward="false" selection-start-line="34" selection-start-column="41" selection-end-line="34" selection-end-column="41" />
+        <state relative-caret-position="1850">
+          <caret line="169" column="0" lean-forward="true" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
+            <element signature="e#969#1404#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_boundingBoxCone#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_boxPosition#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
+            <element signature="e#3465#3479#0" expanded="false" />
+            <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
+            <element signature="e#4674#4799#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/objects/sphere.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1659">
+          <caret line="74" column="29" lean-forward="true" selection-start-line="74" selection-start-column="29" selection-end-line="74" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -764,37 +747,45 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/renderOrder.js">
+    <entry file="file://$PROJECT_DIR$/game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="20" column="18" lean-forward="false" selection-start-line="20" selection-start-column="18" selection-end-line="20" selection-end-column="18" />
+        <state relative-caret-position="225">
+          <caret line="66" column="50" lean-forward="false" selection-start-line="66" selection-start-column="50" selection-end-line="66" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/webgl-obj-loader.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1036">
+          <caret line="280" column="53" lean-forward="false" selection-start-line="280" selection-start-column="53" selection-end-line="280" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="328" column="23" lean-forward="false" selection-start-line="328" selection-start-column="23" selection-end-line="328" selection-end-column="23" />
+        <state relative-caret-position="589">
+          <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+          <folding>
+            <element signature="e#7573#8663#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/objects/car.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="21" column="49" lean-forward="false" selection-start-line="21" selection-start-column="49" selection-end-line="21" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/aabb.js">
+    <entry file="file://$PROJECT_DIR$/renderOrder.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="141" column="8" lean-forward="false" selection-start-line="141" selection-start-column="8" selection-end-line="141" selection-end-column="8" />
-          <folding>
-            <element signature="n#!!block;n#aabb_boundingBoxCube#0" expanded="false" />
-            <element signature="e#911#1346#0" expanded="false" />
-            <element signature="n#!!block;n#aabb_boundingBoxSphere#0" expanded="false" />
-            <element signature="n#!!block;n#aabb_boundingBoxCone#0" expanded="false" />
-            <element signature="n#!!block;n#aabb_matrix_to_vector#0" expanded="false" />
-            <element signature="n#!!block;n#aabb_box_box_detection#0" expanded="false" />
-            <element signature="e#3035#3049#0" expanded="false" />
-            <element signature="n#!!block;n#aabb_max_vector#0" expanded="false" />
-            <element signature="e#4341#4466#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="550">
+          <caret line="49" column="9" lean-forward="true" selection-start-line="49" selection-start-column="9" selection-end-line="49" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
