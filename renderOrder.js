@@ -18,7 +18,7 @@
  *                  This flag determine which axis will be rotated.
  */
 
-
+var maxObjects = 20;
 
 function renderOrder() {
     var shape;
@@ -26,14 +26,13 @@ function renderOrder() {
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
     var bounds = 10;
-    var maxObjects = 2;
+
 
     ///////////////  HERO OBJECT   //////////////////////
     shape = 1;
-    var heroScale = defaultScale;
-    // var heroScale = vec3(0.75, 0.75, 0.75);
+    var heroScale = vec3(0.5, 0.5, 0.5);
     var heroPosition = vec3(0,0,0);
-    hero =[  shape, true, heroScale, heroPosition  ];
+    hero =[  shape, true, defaultScale, heroPosition  ];
 
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
@@ -42,13 +41,13 @@ function renderOrder() {
         var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
 
         // Make half of the objects move
-        // if(i%2 == 0){
-        //     var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
-        //     trans = [translation, translationSecond];
-        // } else {
+        if(i%2 == 0){
+            var translationSecond = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
+            trans = [translation, translationSecond];
+        } else {
         // Make half static
         trans = [translation, defaultTranslation];
-        // }
+        }
 
         historyArray.push([  shape, true, defaultScale, trans, defaultRotation  ]);
     }

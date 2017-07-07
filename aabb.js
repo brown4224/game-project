@@ -3,12 +3,16 @@ var aabb_CubeVertices;
 var aabb_SphereVertices;
 var aabb_ConeVertices;
 
+var aabb_radius = s_radius;
+
 function aabb_INIT() {
     // AABB Colition
     aabb_CubeVertices = aabb_boundingBoxCube(vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
+    // aabb_CubeRadius = aabb_CubeVertices[1][0] - aabb_CubeVertices[0][0];  // max x - min x
     aabb_SphereVertices = aabb_boundingBoxSphere(s_radius);
+    // aabb_SphereRadius = s_radius;
     aabb_ConeVertices = aabb_boundingBoxCone(c_radius, 0, c_height);  // Take radius, base and height
-
+    // aabb_ConeRadius = c_radius;
 }
 
 function aabb_boundingBoxCube(item) {
@@ -59,7 +63,7 @@ function aabb_boundingBoxCone(coneRadius, coneBase, coneHeight){
     return [  vec4(-coneRadius, coneBase, -coneRadius, 1.0), vec4(coneRadius, coneBase + coneHeight, coneRadius, 1.0)  ];
 }
 
-function aabb_currentPosition(typeObject, matrix) {
+function aabb_boxPosition(typeObject, matrix) {
     var current;
     switch (typeObject){
         case 0:  //cube
@@ -84,6 +88,19 @@ function aabb_currentPosition(typeObject, matrix) {
     return [  min, max  ];
 }
 
+function aabb_spherePosition(typeObject, matrix) {
+
+    var orgian = vec4(0.0, 0.0, 0.0, 1.0);
+
+    var min = mult(matrix, orgian);
+    var max = mult(matrix, orgian);
+
+    min = vec3(min[0], min[1], min[2]);
+    max = vec3(max[0], max[1], max[2]);
+
+    return [  min, max  ];
+}
+
 function aabb_matrix_to_vector(matrix) {
     var x = 0;
     var y = 0;
@@ -98,7 +115,7 @@ function aabb_matrix_to_vector(matrix) {
 
 }
 
-function aabb_detection(box1, box2) {
+function aabb_box_box_detection(box1, box2) {
 
     // ALT VERSION
     //  Returns TRUE or FALSE
@@ -116,6 +133,17 @@ function aabb_detection(box1, box2) {
         box1[0][2] <= box2[1][2]     // box1.min.z < box2.max.z
     );
 
+}
+
+function aabb_sphere_box_detection(sphere1, box) {}
+
+function aabb_sphere_sphere_detection(sphere1, sphere2) {
+
+        var sum = aabb_radius + aabb_radius;  // Redesign latter
+        var dist = subtract(sphere1[0], sphere2[0]);
+        var results = Math.sqrt( dist[0] * dist[0] + dist[1] * dist[1] + dist[2] * dist[2]  );
+
+        return (results < sum);
 }
 
 function aabb_distance_detection(box1, box2) {
