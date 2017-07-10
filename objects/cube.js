@@ -19,26 +19,32 @@ function quad(a, b, c, d) {
     pointsArray.push(vertices[a]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[0]);
 
     pointsArray.push(vertices[b]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
-
+    texCoordsArray.push(texCoord[1]); 
+    
     pointsArray.push(vertices[c]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[2]);
 
     pointsArray.push(vertices[a]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[0]);
 
     pointsArray.push(vertices[c]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[2]);
 
     pointsArray.push(vertices[d]);
     colorsArray.push(vertexColors[a]);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[3]);
 
 }
 

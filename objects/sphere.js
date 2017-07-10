@@ -66,6 +66,11 @@ function drawSphere() {
             normalsArray.push(normal);
             normalsArray.push(normal);
             normalsArray.push(normal);
+            
+            // Assuming a square texture (Default)
+            texCoordsArray.push(texCoord[0]);
+            texCoordsArray.push(texCoord[1]);
+            texCoordsArray.push(texCoord[2]);
 
             sphereColor();
             sphereColor();
@@ -79,6 +84,10 @@ function drawSphere() {
             normalsArray.push(normal);
             normalsArray.push(normal);
             normalsArray.push(normal);
+            
+            texCoordsArray.push(texCoord[0]);
+            texCoordsArray.push(texCoord[1]);
+            texCoordsArray.push(texCoord[2]);
 
             sphereColor();
             sphereColor();

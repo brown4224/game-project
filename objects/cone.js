@@ -69,14 +69,17 @@ function drawCone() {
     // Connect last triangle to first
     pointsArray.push(c_last);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[0]); //Temp values 
     addColor();
 
     pointsArray.push(c_top);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[1]);
     addColor();
 
     pointsArray.push(c_first);
     normalsArray.push(normal);
+    texCoordsArray.push(texCoord[2]);
     addColor();
 
     // Add first point before starting loop
@@ -94,14 +97,17 @@ function drawCone() {
 
         pointsArray.push(pt);
         normalsArray.push(normal);
+        texCoordsArray.push(texCoord[0]); //Temp values 
         addColor();
 
         pointsArray.push(c_top);
         normalsArray.push(normal);
+        texCoordsArray.push(texCoord[1]);
         addColor();
 
         pointsArray.push(pt);
         normalsArray.push(normal);
+        texCoordsArray.push(texCoord[2]);
         addColor();
         previous = pt;
     }
