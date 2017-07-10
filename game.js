@@ -3,6 +3,7 @@ var canvas;
 var program;
 var gl;
 var shaderFlag;
+var textureFlag;
 var flag = true;
 var debug = false;
 var random = 0;
@@ -17,6 +18,7 @@ var collitionReady = false;  // Turn on after first render
 var carMesh;
 var pointsArray = [];
 var normalsArray = [];
+var texCoordsArray = [];
 var shapeArray = [];  // CUBE, SPHERE, CONE: [START, OFFset]
 var historyArray = [];
 var hero = [];
@@ -93,6 +95,17 @@ var vertexColors = [
     vec4(1.0, 1.0, 1.0, 1.0)  // white
 ];
 
+// Texture data from file
+var texture;
+
+// Texture Coordinates (simple for now, we can expand latter)
+var texCoord = [
+    vec2(0, 0),
+    vec2(0, 1),
+    vec2(1, 1),
+    vec2(1, 0)
+];
+
 window.onload = function init() {
 
     ///////////////  INIT PROGRAM   //////////////////////
@@ -151,9 +164,23 @@ window.onload = function init() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(pointsArray), gl.STATIC_DRAW);
 
+
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
+    
+    ///////////////  TEXTURE BUFFER   //////////////////////
+    var tBuffer = gl.createBuffer();
+    gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
+    gl.bufferData( gl.ARRAY_BUFFER, flatten(texCoordsArray), gl.STATIC_DRAW );
+
+    var vTexCoord = gl.getAttribLocation( program, "vTexCoord" );
+    gl.vertexAttribPointer( vTexCoord, 2, gl.FLOAT, false, 0, 0 );
+    gl.enableVertexAttribArray( vTexCoord );
+    
+    // Turn into array at some point when we have multiple textures
+    var image = document.getElementById("sonicTexture");
+    configureTexture( image );
 
     modelView = gl.getUniformLocation(program, "modelView");
     projection = gl.getUniformLocation(program, "projection");
@@ -220,6 +247,20 @@ window.onload = function init() {
         gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), flatten(lightPosition));
 
     }
+    
+    function configureTexture( image ) {
+        texture = gl.createTexture();
+        gl.bindTexture( gl.TEXTURE_2D, texture );
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
+            gl.RGB, gl.UNSIGNED_BYTE, image );
+        gl.generateMipmap( gl.TEXTURE_2D );
+        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+            gl.NEAREST_MIPMAP_LINEAR );
+        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+
+        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
+}
 
     ///////////////  Buttons   //////////////////////
     ////////////////////////////////////////////////////////////////

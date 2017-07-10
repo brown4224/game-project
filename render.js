@@ -57,7 +57,7 @@ var render = function () {
         }
     }
 
-    renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix);
+    renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix, 0);
 
     // // Random Object
     var size = historyArray.length;
@@ -77,6 +77,10 @@ var render = function () {
         if (flag) {
             flagValue = 1.0;
         }
+        var texFlag = 0.0;
+        if (shape == 0){
+            texFlag = 1.0;
+        }
         /////////////////////////////////////////////////////////////////////
         /////////////  MATRIX MULTIPLICATION ///////////////////////////////
         // Look: Resets the position for each object
@@ -89,7 +93,7 @@ var render = function () {
         var position = aabb_spherePosition(shape, aabb_matrix );
         collisionLocation_sphere[id] = position;
 
-        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix);
+        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
     }
 
     /**
@@ -103,9 +107,11 @@ var render = function () {
     requestAnimFrame(render);
 };
 
-function renderObject(indexArray, flagValue, mvMatrix, pMatrix) {
+function renderObject(indexArray, flagValue, mvMatrix, pMatrix, texValue) {
     // All that work:  Lets Render!
     gl.uniform1f(gl.getUniformLocation(program, "shaderFlag"), flagValue);
+    gl.uniform1f(gl.getUniformLocation(program, "textureFlag"), texValue);
+    
     gl.uniformMatrix4fv(modelView, false, flatten(mvMatrix));
     gl.uniformMatrix4fv(projection, false, flatten(pMatrix));
     gl.drawArrays(gl.TRIANGLES, indexArray[0], indexArray[1]);
