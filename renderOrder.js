@@ -18,7 +18,7 @@
  *                  This flag determine which axis will be rotated.
  */
 
-var maxObjects = 5;
+var maxObjects = 12;
 
 function renderOrder() {
     var shape;
@@ -35,10 +35,15 @@ function renderOrder() {
     // var heroScale = vec3(0.5, 0.5, 0.5);
     var heroPosition = vec3(0,0,0);
     hero =[  shape, true, defaultScale, heroPosition  ];
+    
+    ///////////////  DRAW GROUND   //////////////////////
+    historyArray.push([  2, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false] ]);
+    console.log("Ground");
+    console.log(historyArray[historyArray.length - 1]);
 
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
-        shape = randomNumber(3, 0, false);
+        shape = randomNumber(2, 0, false);
         var trans;
         var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
 
@@ -52,7 +57,10 @@ function renderOrder() {
         }
 
         historyArray.push([  shape, true, defaultScale, trans, defaultRotation  ]);
+        console.log(historyArray[historyArray.length - 1]);
+        
     }
+    
 }
 
 // Input:   max value for 0 to max. + offset

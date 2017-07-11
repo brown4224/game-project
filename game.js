@@ -129,10 +129,14 @@ window.onload = function init() {
     /////////////  DRAW SHAPES   //////////////////////
     // Imported from Cube File
     // Pass Draw Functions into helper function
+
+    
     shapeMapper(drawCube, pointsArray.length);
     shapeMapper(drawSphere, pointsArray.length);
+    shapeMapper(drawGround, pointsArray.length);
     shapeMapper(drawCone, pointsArray.length);
 
+    
     drawCar();
     aabb_INIT();
     renderOrder();
@@ -179,8 +183,7 @@ window.onload = function init() {
     gl.enableVertexAttribArray( vTexCoord );
     
     // Turn into array at some point when we have multiple textures
-    var image = document.getElementById("sonicTexture");
-    configureTexture( image );
+
 
     modelView = gl.getUniformLocation(program, "modelView");
     projection = gl.getUniformLocation(program, "projection");
@@ -247,20 +250,7 @@ window.onload = function init() {
         gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), flatten(lightPosition));
 
     }
-    
-    function configureTexture( image ) {
-        texture = gl.createTexture();
-        gl.bindTexture( gl.TEXTURE_2D, texture );
-        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
-            gl.RGB, gl.UNSIGNED_BYTE, image );
-        gl.generateMipmap( gl.TEXTURE_2D );
-        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
-            gl.NEAREST_MIPMAP_LINEAR );
-        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
-
-        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
-}
+   
 
     ///////////////  Buttons   //////////////////////
     ////////////////////////////////////////////////////////////////

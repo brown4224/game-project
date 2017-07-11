@@ -1,7 +1,9 @@
-
+var image;
 
 var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    
+    var texture_constants = [document.getElementById("sonicTexture"), document.getElementById("sonicTexture"), document.getElementById("groundTexture")];
 
     // CAMERA AND MODEL VIEW
     eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
@@ -78,9 +80,16 @@ var render = function () {
             flagValue = 1.0;
         }
         var texFlag = 0.0;
-        if (shape == 0){
+        if (shape == 0 || shape == 2){
+            
+            if(image != texture_constants[shape]){
+                image = texture_constants[shape];
+                configureTexture( image );
+            }
+            
             texFlag = 1.0;
         }
+        
         /////////////////////////////////////////////////////////////////////
         /////////////  MATRIX MULTIPLICATION ///////////////////////////////
         // Look: Resets the position for each object
@@ -117,6 +126,20 @@ function renderObject(indexArray, flagValue, mvMatrix, pMatrix, texValue) {
     gl.drawArrays(gl.TRIANGLES, indexArray[0], indexArray[1]);
 }
 
+function configureTexture( image ) {
+        texture = gl.createTexture();
+        gl.bindTexture( gl.TEXTURE_2D, texture );
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
+            gl.RGB, gl.UNSIGNED_BYTE, image );
+        gl.generateMipmap( gl.TEXTURE_2D );
+        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+            gl.NEAREST_MIPMAP_LINEAR );
+        gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST );
+
+        gl.uniform1i(gl.getUniformLocation(program, "texture"), 0);
+}
+
 function matrixMult(matrix, scaler, trans, axis) {
     /**
      * Calculates the matrix for each object
@@ -133,12 +156,14 @@ function matrixMult(matrix, scaler, trans, axis) {
     matrix = mult(matrix, scalem(scaler[0], scaler[1], scaler[2]));
     matrix = mult(matrix, translate(movementMatrix));
     matrix = mult(matrix, translate(trans[0]));
+    
     if (axis[0])
         matrix = mult(matrix, rotateX(xAxis));
     if (axis[1])
         matrix = mult(matrix, rotateY(yAxis));
     if (axis[2])
         matrix = mult(matrix, rotateZ(zAxis));
+    
 
     return mult(matrix, translate(trans[1]));
 }
