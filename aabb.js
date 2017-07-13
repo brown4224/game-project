@@ -163,11 +163,15 @@ function aabb_sphere_sphere_detection(sphere1, sphere2) {
     return (results < sumRadius);
 }
 
-function aabb_distance_detection(box1, box2) {
+function aabb_distance_detection_vector(box1, box2) {
     var dist1 = subtract(box1[0], box2[1]);
     var dist2 = subtract(box2[0], box1[1]);
-    var maxDist = aabb_max_vector(dist1, dist2);
+    return aabb_max_vector(dist1, dist2);
 
+}
+
+function aabb_distance_detection(box1, box2) {
+    var maxDist = aabb_distance_detection_vector(box1, box2);
     if( maxValue(maxDist) <= 0)
         return true;
 

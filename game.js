@@ -11,7 +11,11 @@ var random = 0;
 //AABB
 var heroPosition;
 var collision = false;  // If hero runs into object
+// var collisionDistance = [999, 999, 999];
+var collisionObjects = [];  // Array of objects after the collition has occured
 var collisionLocation_sphere = [maxObjects];   // An array of objects current location.  Give each object an ID
+var collisionLocation = [maxObjects];   // An array of objects current location.  Give each object an ID
+
 var collitionReady = false;  // Turn on after first render
 
 // Arrays
@@ -29,7 +33,7 @@ var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
 var maxSpeed = 0.4;
 var defaultSpeed = 0.1;
 var speed = defaultSpeed;
-var speedOffset =  0;  // Offset for uparrow and down arrow.  Use values form 0 [to 1]
+// var speedOffset =  0;  // Offset for uparrow and down arrow.  Use values form 0 [to 1]
 var acceleration = 0.005;  // Use small values
 var turnSpeed = 5;   // Measured in Degrees
 var  keymap = [];  // Stores callback functions.  Not numbers
@@ -304,20 +308,24 @@ window.onload = function init() {
     }
 
     function repeateKeyDown(key) {
-
         // Give us accelleration
         if (speed < maxSpeed) {
             speed += acceleration;
         }
+        // Calculate futer location on user input
+        var futureX =   speed * Math.sin(theta);
+        var futureY =   0;
+        var futureZ =  speed *  Math.cos(theta);
+
 
         var rotationSpeed = 50 * speed;
 
         if ( key == 38) {  // up arrow
-            upArrow(speedOffset);
+            upArrow();
         }
 
         if ( key == 40) {  // down arrow
-            downArrow(speedOffset);
+            downArrow();
         }
         if ( key == 39) {  // right arrow
             rightArrow(turnSpeed);
@@ -332,20 +340,51 @@ window.onload = function init() {
         //////////////    Arrow Functions   ///////////////////////////
         ////////////////////////////////////////////////////////////////
         function upArrow(speedAdjust) {
-            movementMatrix[0] += (speed + speedAdjust) * Math.sin(theta);
-            movementMatrix[2] += (speed + speedAdjust)  *  Math.cos(theta);
-            // Object Rotation
-            hzAxis += rotationSpeed *  Math.sin(theta);
-            hxAxis += rotationSpeed *  Math.cos(theta);
 
+            if(!collision){
+                moveForward();
+            }
+            else if(collisionObjects.length > 0){
+                var id = collisionObjects.pop();
+                var fpos = collisionLocation_sphere[id];
+                fpos[0][0] += futureX;
+                fpos[0][1] += futureY;
+                fpos[0][2] += futureZ;
+                var futureCollision = aabb_sphere_sphere_detection(heroPosition, fpos);
+
+                // If we can move, Move
+                if(!futureCollision) {
+                    moveForward();
+                    if (collisionObjects.length < 1)
+                        collision = false;
+                }else
+                    collisionObjects.push(id);// Otherwise put back on array.  Stuck
+            } else {
+                collision = false;
+            }
         }
         function downArrow(speedAdjust) {
-            // Movement
-            movementMatrix[0] -= (speed + speedAdjust) * Math.sin(theta);
-            movementMatrix[2] -= (speed + speedAdjust)  *  Math.cos(theta);
-            // Object Rotation
-            hzAxis -= rotationSpeed *  Math.sin(theta);
-            hxAxis -= rotationSpeed *  Math.cos(theta);
+            if(!collision){
+                moveBackward();
+            }
+            else if(collisionObjects.length > 0){
+                var id = collisionObjects.pop();
+                var fpos = collisionLocation_sphere[id];
+                fpos[0][0] -= futureX;
+                fpos[0][1] -= futureY;
+                fpos[0][2] -= futureZ;
+                var futureCollision = aabb_sphere_sphere_detection(heroPosition, fpos);
+
+                // If we can move, Move
+                if(!futureCollision) {
+                    moveBackward();
+                    if (collisionObjects.length < 1)
+                        collision = false;
+                }else
+                    collisionObjects.push(id);// Otherwise put back on array.  Stuck
+            } else {
+                collision = false;
+            }
         }
         function leftArrow(degreeTurn) {
             theta += (dr * degreeTurn);
@@ -355,6 +394,27 @@ window.onload = function init() {
             theta -= (dr * degreeTurn);
 
         }
+
+        function moveForward() {
+            movementMatrix[0] += futureX;
+            movementMatrix[1] += futureY;
+            movementMatrix[2] += futureZ;
+            // Object Rotation
+            hzAxis += rotationSpeed *  Math.sin(theta);
+            hxAxis += rotationSpeed *  Math.cos(theta);
+        }
+
+        function moveBackward() {
+            movementMatrix[0] -= futureX;
+            movementMatrix[1] -= futureY;
+            movementMatrix[2] -= futureZ;
+            // Object Rotation
+            hzAxis += rotationSpeed *  Math.sin(theta);
+            hxAxis += rotationSpeed *  Math.cos(theta);
+        }
+
+
+
     }
     ///////////////  Mouse   //////////////////////
     var gc = document.getElementById("gl-canvas");

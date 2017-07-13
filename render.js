@@ -48,16 +48,32 @@ var render = function () {
     aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
     aabb_matrix = mult(aabb_matrix, translate(hero[3]));
     heroPosition = aabb_spherePosition(hero[0], aabb_matrix );
+    // heroPosition = aabb_boxPosition(hero[0], aabb_matrix );
+
+    // if(collitionReady){
+    //     for(var i = 0; i < collisionLocation.length; i++){
+    //         var results = aabb_box_box_detection(heroPosition, collisionLocation[i]);
+    //         if(results){
+    //             collision = results;  // We have detected a collision
+    //             collisionObjects.push( i );  // Push the ID of the object
+    //             break;
+    //         }
+    //     }
+    // }
 
     if(collitionReady){
         for(var i = 0; i < collisionLocation_sphere.length; i++){
             var results = aabb_sphere_sphere_detection(heroPosition, collisionLocation_sphere[i]);
             if(results){
                 collision = results;  // We have detected a collision
+                collisionObjects.push(i);
+                // collisionObjects.push([ aabb_sphere_sphere_detection,  collisionLocation_sphere[i]  ]);  // array, pass in the detection function and object
                 break;
             }
         }
     }
+    // console.log("Collision detection");
+    // console.log(collision);
 
     renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix, 0);
 
@@ -98,7 +114,9 @@ var render = function () {
 
         ////////////////////    AABB    //////////////////////////////
         var aabb_matrix = mat4();
-        aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
+        aabb_matrix = matrixMult(aabb_matrix, vec3(2,2,2), trans, axis);
+        // var position = aabb_boxPosition(shape, aabb_matrix );
+        // collisionLocation[id] = position;
         var position = aabb_spherePosition(shape, aabb_matrix );
         collisionLocation_sphere[id] = position;
 
