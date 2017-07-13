@@ -2,7 +2,10 @@ var image;
 
 var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    
+
+
+
+
     var texture_constants = [document.getElementById("sonicTexture"), document.getElementById("sonicTexture"), document.getElementById("groundTexture")];
 
     // CAMERA AND MODEL VIEW

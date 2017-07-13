@@ -78,14 +78,29 @@ var green = 1.0;
 var blue = 1.0;
 
 var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
+// var lightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);
+
+var carLightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);  // Points away from car
+
+
 var lightAmbient;
 var lightDiffuse;
 var lightSpecular;
 
-var materialAmbient = vec4(1.0, 1.0, 1.0, 1.0);
+var materialAmbient = vec4(0.5, 0.5, 0.5, 1.0);  // Turn overhead lights on and off
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 var materialShininess = 100.0;
+
+var night = true;
+var carLightAmbient;
+var carLightDiffuse;
+var carLightSpecular;
+
+var carMaterialAmbient = vec4(0.1, 0.1, 0.1, 1.0);
+var carMaterialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+var carMaterialSpecular = vec4(0.0, 0.0, 0.0, 1.0);
+// var carMaterialShininess = 100.0;
 
 // Color
 var vertexColors = [
@@ -236,6 +251,8 @@ window.onload = function init() {
     updateLightPosition();
     function updateLight() {
         ///////////////  LIGHTING   //////////////////////
+
+        // Global Lighting
         lightAmbient = vec4(red, green, blue, 1.0);
         lightDiffuse = vec4(red, green, blue, 1.0);
         lightSpecular = vec4(red, green, blue, 1.0);
@@ -247,11 +264,26 @@ window.onload = function init() {
         gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"), flatten(ambientProduct));
         gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"), flatten(diffuseProduct));
         gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"), flatten(specularProduct));
+
+
+        // Car Lighting
+        carLightAmbient = vec4(red, green, blue, 1.0);
+        carLightDiffuse = vec4(red, green, blue, 1.0);
+        carLightSpecular = vec4(red, green, blue, 1.0);
+
+        var carAmbientProduct = mult(carLightAmbient, carMaterialAmbient);
+        var carDiffuseProduct = mult(carLightDiffuse, carMaterialDiffuse);
+        var carSpecularProduct = mult(carLightSpecular, carMaterialSpecular);
+
+        gl.uniform4fv(gl.getUniformLocation(program, "carAmbientProduct"), flatten(carAmbientProduct));
+        gl.uniform4fv(gl.getUniformLocation(program, "carDiffuseProduct"), flatten(carDiffuseProduct));
+        gl.uniform4fv(gl.getUniformLocation(program, "carSpecularProduct"), flatten(carSpecularProduct));
     }
 
     function updateLightPosition() {
         ///////////////  LIGHTING Position   //////////////////////
         gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"), flatten(lightPosition));
+        gl.uniform4fv(gl.getUniformLocation(program, "carLightPosition"), flatten(carLightPosition));
 
     }
    
