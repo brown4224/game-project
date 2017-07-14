@@ -11,8 +11,6 @@ var random = 0;
 //AABB
 var isNear = 4;  // Min distance before we want to compare objects
 var heroPosition;
-// var collision = false;  // If hero runs into object
-// var collisionDistance = [999, 999, 999];
 var keydown_move = false;
 var collisionObjects = [];  // Array of objects after the collition has occured
 var collisionLocation_sphere = [maxObjects];   // An array of objects current location.  Give each object an ID
@@ -35,7 +33,6 @@ var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
 var maxSpeed = 0.4;
 var defaultSpeed = 0.1;
 var speed = defaultSpeed;
-// var speedOffset =  0;  // Offset for uparrow and down arrow.  Use values form 0 [to 1]
 var acceleration = 0.005;  // Use small values
 var turnSpeed = 5;   // Measured in Degrees
 var  keymap = [];  // Stores callback functions.  Not numbers
@@ -52,7 +49,6 @@ var far = 30.0;
 var radius = 10.0;
 var theta = 0;  // Radians
 var phi = 0.0;
-// var dr = 10.0 * Math.PI / 180.0;
 var dr = Math.PI / 180.0;
 
 // Aspect Ratio
@@ -71,38 +67,29 @@ var eye;
 const at = vec3(0.0, 0.0, 0.0);
 const up = vec3(0.0, 1.0, 0.0);
 
+
+// Night
+var isNight = false;
+var nightTimer = 10000;  //  Timer Callback,  10 Seconds
+
 // Lighting
+var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
+var carLightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);  // Points away from car
 var ambientColor, diffuseColor, specularColor;
 
-// Lighting Color
-var red = 1.0;
-var green = 1.0;
-var blue = 1.0;
 
-var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
-// var lightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);
+var lightAmbient = vec4(1.0, 1.0, 1.0, 1.0);    // Turn overhead lights on and off:   Night callback functions
+var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);  // Turn overhead lights on and off:   Night callback functions
+var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);// Turn overhead lights on and off:   Night callback functions
 
-var carLightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);  // Points away from car
-
-
-var lightAmbient;
-var lightDiffuse;
-var lightSpecular;
-
-var materialAmbient = vec4(1.0, 1.0, 1.0, 1.0);  // Turn overhead lights on and off
+var materialAmbient = vec4(1.0, 1.0, 1.0, 1.0);
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 var materialShininess = 100.0;
 
-var night = true;
-var carLightAmbient;
-var carLightDiffuse;
-var carLightSpecular;
-
-var carMaterialAmbient = vec4(0.1, 0.1, 0.1, 1.0);
-var carMaterialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
-var carMaterialSpecular = vec4(0.0, 0.0, 0.0, 1.0);
-// var carMaterialShininess = 100.0;
+var carLightAmbient = vec4(0.0, 0.0, 0.0, 1.0);
+var carLightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+var carLightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 
 // Color
 var vertexColors = [
@@ -136,7 +123,7 @@ window.onload = function init() {
         alert("WebGL isn't available");
     }
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(0.9, 0.9, 0.9, 1.0);
+    gl.clearColor(1.0, 1.0, 1.0, 1.0);
     gl.enable(gl.DEPTH_TEST);
 
     program = initShaders(gl, "light-shader", "fragment-shader");
@@ -151,13 +138,13 @@ window.onload = function init() {
     // Imported from Cube File
     // Pass Draw Functions into helper function
 
-    
+
     shapeMapper(drawCube, pointsArray.length);
     shapeMapper(drawSphere, pointsArray.length);
     shapeMapper(drawGround, pointsArray.length);
     // shapeMapper(drawCone, pointsArray.length);
 
-    
+
     drawCar();
     aabb_INIT();
     renderOrder();
@@ -193,7 +180,7 @@ window.onload = function init() {
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
-    
+
     ///////////////  TEXTURE BUFFER   //////////////////////
     var tBuffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, tBuffer );
@@ -202,51 +189,13 @@ window.onload = function init() {
     var vTexCoord = gl.getAttribLocation( program, "vTexCoord" );
     gl.vertexAttribPointer( vTexCoord, 2, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( vTexCoord );
-    
+
     // Turn into array at some point when we have multiple textures
 
 
     modelView = gl.getUniformLocation(program, "modelView");
     projection = gl.getUniformLocation(program, "projection");
     gl.uniform1f(gl.getUniformLocation(program, "shininess"), materialShininess);
-    //
-    // ///////////////  APPEND Car to Buffer   //////////////////////
-    // var objStr = document.getElementById('car.obj').innerHTML;
-    // carMesh = new OBJ.Mesh(objStr);
-    // var start = pointsArray.length;
-    // OBJ.initMeshBuffers(gl, carMesh);
-    //
-    //
-    // var vPosition = gl.getAttribLocation(program, "vPosition");
-    // gl.bindBuffer(gl.ARRAY_BUFFER, carMesh.vertexBuffer);
-    // gl.vertexAttribPointer(vPosition, carMesh.vertexBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(vPosition);
-    //
-    //
-    // var vNormal = gl.getAttribLocation(program, "vNormal");
-    // gl.bindBuffer(gl.ARRAY_BUFFER, carMesh.normalBuffer);
-    // gl.vertexAttribPointer(vNormal, carMesh.normalBuffer.itemSize, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(vNormal);
-    //
-    // var  colorCount = 0;
-    // for(var i = 0; i < carMesh.vertices.length / 3; i++){
-    //
-    //     //  Temp.  just so something shows up
-    //     colorsArray.push(vertexColors[colorCount]);
-    //     colorCount  =   ++colorCount % 3;
-    // }
-    // ///////////////  COLOR BUFFER   //////////////////////
-    // var cBuffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    // gl.bufferData(gl.ARRAY_BUFFER, flatten(colorsArray), gl.STATIC_DRAW);
-    //
-    // var vColor = gl.getAttribLocation(program, "vColor");
-    // gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    // gl.enableVertexAttribArray(vColor);
-    //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, carMesh.indexBuffer);
-    // gl.drawElements(gl.TRIANGLES,  carMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
-    //
 
 
     updateLight();
@@ -255,10 +204,6 @@ window.onload = function init() {
         ///////////////  LIGHTING   //////////////////////
 
         // Global Lighting
-        lightAmbient = vec4(red, green, blue, 1.0);
-        lightDiffuse = vec4(red, green, blue, 1.0);
-        lightSpecular = vec4(red, green, blue, 1.0);
-
         var ambientProduct = mult(lightAmbient, materialAmbient);
         var diffuseProduct = mult(lightDiffuse, materialDiffuse);
         var specularProduct = mult(lightSpecular, materialSpecular);
@@ -269,13 +214,9 @@ window.onload = function init() {
 
 
         // Car Lighting
-        carLightAmbient = vec4(red, green, blue, 1.0);
-        carLightDiffuse = vec4(red, green, blue, 1.0);
-        carLightSpecular = vec4(red, green, blue, 1.0);
-
-        var carAmbientProduct = mult(carLightAmbient, carMaterialAmbient);
-        var carDiffuseProduct = mult(carLightDiffuse, carMaterialDiffuse);
-        var carSpecularProduct = mult(carLightSpecular, carMaterialSpecular);
+        var carAmbientProduct = mult(carLightAmbient, materialAmbient);
+        var carDiffuseProduct = mult(carLightDiffuse, materialDiffuse);
+        var carSpecularProduct = mult(carLightSpecular, materialSpecular);
 
         gl.uniform4fv(gl.getUniformLocation(program, "carAmbientProduct"), flatten(carAmbientProduct));
         gl.uniform4fv(gl.getUniformLocation(program, "carDiffuseProduct"), flatten(carDiffuseProduct));
@@ -288,7 +229,45 @@ window.onload = function init() {
         gl.uniform4fv(gl.getUniformLocation(program, "carLightPosition"), flatten(carLightPosition));
 
     }
-   
+
+
+    ////////////////////////////////////////////////////////////////
+    //////////////    Night Callbacks   ///////////////////////////
+    ////////////////////////////////////////////////////////////////
+    var nightCallback;
+    setInterval(function () {
+        isNight = !isNight;
+        nightCallback = night();
+    }, nightTimer);
+
+    function night() {
+        return setInterval(function () {
+            var dxNight = 1;
+            var dxLight = 0.05;
+            if(isNight && lightAmbient[0] > 0.0 ){
+                dxNight = -1;
+                nightTransition(dxLight, dxNight);
+            } else if (!isNight && lightAmbient[0] < 1.0){
+                nightTransition(dxLight, dxNight);
+            } else {
+                clearInterval(nightCallback);  // Delete Callback when done!!!!
+            }
+        }, 50);
+    }
+
+    function nightTransition(dxLight, dxNight) {
+
+        var intensity = lightAmbient[0]  += dxLight * dxNight;
+
+        // Change Main Light source and Background
+        lightAmbient = vec4(intensity,intensity,intensity, 1.0);
+        lightDiffuse = vec4(intensity,intensity,intensity, 1.0);
+        lightSpecular = vec4(intensity,intensity,intensity, 1.0);
+        gl.clearColor(intensity,intensity,intensity, 1.0);
+        updateLight();
+    }
+
+
 
     ///////////////  Buttons   //////////////////////
     ////////////////////////////////////////////////////////////////
@@ -333,7 +312,7 @@ window.onload = function init() {
          */
 
         e = e || window.event;
-		e.preventDefault();
+        e.preventDefault();
         var key = e.which;
         if(!keymap[key]){
             keymap[key] = setInterval(function () {
@@ -418,28 +397,27 @@ window.onload = function init() {
 
     }
     ///////////////  Mouse   //////////////////////
-    var gc = document.getElementById("gl-canvas");
+    // var gc = document.getElementById("gl-canvas");
+    //
+    // /**
+    //  * This function move the "At" part of look at.
+    //  * The eye remains unchanged
+    //  */
+    // gc.addEventListener("mousemove", function (event) {
+    //     // Do stuff
+    // });
+    //
+    // gc.addEventListener("mouseclick", function (event) {
+    //     // Do stuff
+    // });
 
-    /**
-     * This function move the "At" part of look at.
-     * The eye remains unchanged
-     */
-    gc.addEventListener("mousemove", function (event) {
-        // Do stuff
-    });
 
-    gc.addEventListener("mouseclick", function (event) {
-        // Do stuff
-    });
-
-
-    // Moved to seperate file:  render.js
     render();
 };
 
 
 function collisionDetectionSPhere(fx, fy, fz) {
-    
+
 
 
     for(var i = 1; i < collisionLocation_sphere.length; i++){
