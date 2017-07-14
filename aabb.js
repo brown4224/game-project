@@ -8,16 +8,16 @@ var aabb_SphereRadius;
 var aabb_ConeRadius;
 
 
-var aabb_radius = s_radius;
+var aabb_radius = s_radius;  // If we want to hard code
 
 function aabb_INIT() {
     // AABB Colition
     aabb_CubeVertices = aabb_boundingBoxCube(vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
-    aabb_CubeRadius = aabb_CubeVertices[1][0] - aabb_CubeVertices[0][0];  // max x - min x
+    aabb_CubeRadius = distance(aabb_CubeVertices[1], aabb_CubeVertices[0]) /2;
+
     aabb_SphereVertices = aabb_boundingBoxSphere(s_radius);
     aabb_SphereRadius = s_radius;
-    aabb_ConeVertices = aabb_boundingBoxCone(c_radius, 0, c_height);  // Take radius, base and height
-    aabb_ConeRadius = c_radius;
+
 }
 
 function aabb_boundingBoxCube(item) {
@@ -95,26 +95,41 @@ function aabb_boxPosition(typeObject, matrix) {
 
 function aabb_spherePosition(typeObject, matrix) {
     //  Hard code radius
-    var radius = aabb_radius;
+    // var sp_radius = aabb_radius;
 
     // var radius;
-    // switch (typeObject) {
-    //     case 0:  //cube
-    //         radius = aabb_CubeRadius;
-    //         break;
-    //     case 1:  //Sphere
-    //         radius = aabb_SphereRadius;
-    //         break;
-    //     case 2:  //Cone
-    //         radius = aabb_ConeRadius;
-    //         break;
-    //     default:
-    //         radius = aabb_SphereRadius;
-    // }
+    switch (typeObject) {
+        case 0:  //cube
+            sp_radius = aabb_CubeRadius;
+            break;
+        case 1:  //Sphere
+            sp_radius = aabb_SphereRadius;
+            break;
+        case 2:  //Ground
+            sp_radius = aabb_SphereRadius;
+
+            console.log("There was an error.  Ground doesn't have a radius")
+            break;
+        case 3:  //Cone
+            sp_radius = aabb_ConeRadius;
+            break;
+        default:
+            sp_radius = aabb_SphereRadius;
+    }
     var orgian = vec4(0.0, 0.0, 0.0, 1.0);
     var pos = mult(matrix, orgian);
     pos =  vec3(pos[0], pos[1], pos[2]);
-    return [ pos, radius];
+
+    var orginDist =  distance(pos, vec3(0,0,0));
+
+    return [ pos, sp_radius, orginDist];
+
+}
+
+
+function distance(pnt1, pnt2) {
+    var dist = subtract(pnt1, pnt2);
+    return  Math.sqrt( dist[0] * dist[0] + dist[1] * dist[1] + dist[2] * dist[2]  );
 
 }
 
@@ -155,15 +170,13 @@ function aabb_box_box_detection(box1, box2) {
 function aabb_sphere_box_detection(sphere1, box) {}
 
 function aabb_sphere_sphere_detection(sphere1, sphere2) {
-
-    var dist = subtract(sphere1[0], sphere2[0]);
-    var results = Math.sqrt( dist[0] * dist[0] + dist[1] * dist[1] + dist[2] * dist[2]  );
+    var results = distance(sphere1[0], sphere2[0]);
     var sumRadius = sphere1[1] + sphere2[1];
 
     return (results < sumRadius);
 }
 
-function aabb_distance_detection_vector(box1, box2) {
+function aabb_box_distance_vector(box1, box2) {
     var dist1 = subtract(box1[0], box2[1]);
     var dist2 = subtract(box2[0], box1[1]);
     return aabb_max_vector(dist1, dist2);
@@ -171,7 +184,7 @@ function aabb_distance_detection_vector(box1, box2) {
 }
 
 function aabb_distance_detection(box1, box2) {
-    var maxDist = aabb_distance_detection_vector(box1, box2);
+    var maxDist = aabb_box_distance_vector(box1, box2);
     if( maxValue(maxDist) <= 0)
         return true;
 

@@ -10,7 +10,7 @@ var random = 0;
 
 //AABB
 var heroPosition;
-var collision = false;  // If hero runs into object
+// var collision = false;  // If hero runs into object
 // var collisionDistance = [999, 999, 999];
 var collisionObjects = [];  // Array of objects after the collition has occured
 var collisionLocation_sphere = [maxObjects];   // An array of objects current location.  Give each object an ID
@@ -87,7 +87,7 @@ var lightAmbient;
 var lightDiffuse;
 var lightSpecular;
 
-var materialAmbient = vec4(0.5, 0.5, 0.5, 1.0);  // Turn overhead lights on and off
+var materialAmbient = vec4(1.0, 1.0, 1.0, 1.0);  // Turn overhead lights on and off
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 var materialShininess = 100.0;
@@ -153,7 +153,7 @@ window.onload = function init() {
     shapeMapper(drawCube, pointsArray.length);
     shapeMapper(drawSphere, pointsArray.length);
     shapeMapper(drawGround, pointsArray.length);
-    shapeMapper(drawCone, pointsArray.length);
+    // shapeMapper(drawCone, pointsArray.length);
 
     
     drawCar();
@@ -371,51 +371,20 @@ window.onload = function init() {
         ////////////////////////////////////////////////////////////////
         //////////////    Arrow Functions   ///////////////////////////
         ////////////////////////////////////////////////////////////////
+
         function upArrow(speedAdjust) {
+            var collision = collisionDetectionSPhere(futureX, futureY, futureZ);
 
             if(!collision){
-                moveForward();
-            }
-            else if(collisionObjects.length > 0){
-                var id = collisionObjects.pop();
-                var fpos = collisionLocation_sphere[id];
-                fpos[0][0] += futureX;
-                fpos[0][1] += futureY;
-                fpos[0][2] += futureZ;
-                var futureCollision = aabb_sphere_sphere_detection(heroPosition, fpos);
-
-                // If we can move, Move
-                if(!futureCollision) {
-                    moveForward();
-                    if (collisionObjects.length < 1)
-                        collision = false;
-                }else
-                    collisionObjects.push(id);// Otherwise put back on array.  Stuck
-            } else {
-                collision = false;
+                move(1);
             }
         }
-        function downArrow(speedAdjust) {
-            if(!collision){
-                moveBackward();
-            }
-            else if(collisionObjects.length > 0){
-                var id = collisionObjects.pop();
-                var fpos = collisionLocation_sphere[id];
-                fpos[0][0] -= futureX;
-                fpos[0][1] -= futureY;
-                fpos[0][2] -= futureZ;
-                var futureCollision = aabb_sphere_sphere_detection(heroPosition, fpos);
 
-                // If we can move, Move
-                if(!futureCollision) {
-                    moveBackward();
-                    if (collisionObjects.length < 1)
-                        collision = false;
-                }else
-                    collisionObjects.push(id);// Otherwise put back on array.  Stuck
-            } else {
-                collision = false;
+        function downArrow(speedAdjust) {
+            var collision = collisionDetectionSPhere(-futureX, -futureY, -futureZ);
+
+            if(!collision){
+                move(-1);
             }
         }
         function leftArrow(degreeTurn) {
@@ -427,23 +396,16 @@ window.onload = function init() {
 
         }
 
-        function moveForward() {
-            movementMatrix[0] += futureX;
-            movementMatrix[1] += futureY;
-            movementMatrix[2] += futureZ;
+        function move(direction) {
+            movementMatrix[0] += direction * futureX;
+            movementMatrix[1] += direction * futureY;
+            movementMatrix[2] += direction * futureZ;
             // Object Rotation
-            hzAxis += rotationSpeed *  Math.sin(theta);
-            hxAxis += rotationSpeed *  Math.cos(theta);
+            hzAxis += direction * rotationSpeed *  Math.sin(theta);
+            hxAxis += direction * rotationSpeed *  Math.cos(theta);
         }
 
-        function moveBackward() {
-            movementMatrix[0] -= futureX;
-            movementMatrix[1] -= futureY;
-            movementMatrix[2] -= futureZ;
-            // Object Rotation
-            hzAxis += rotationSpeed *  Math.sin(theta);
-            hxAxis += rotationSpeed *  Math.cos(theta);
-        }
+
 
 
 
@@ -467,3 +429,29 @@ window.onload = function init() {
     // Moved to seperate file:  render.js
     render();
 };
+
+
+function collisionDetectionSPhere(fx, fy, fz) {
+    var isNear = 4;
+
+    for(var i = 1; i < collisionLocation_sphere.length; i++){
+        // Only process near objects
+        if(collisionLocation_sphere[i][2] < isNear){
+            // Grab object anc calculate future position
+            var pos = collisionLocation_sphere[i];
+            pos[0][0] += fx;
+            pos[0][1] += fy;
+            pos[0][2] += fz;
+            var results = aabb_sphere_sphere_detection(heroPosition, pos);
+            // console.log("Collition: " + results);
+            if (results){
+                return true;
+            }
+        }
+
+
+
+    }  // End for loop
+    return false;
+
+}
