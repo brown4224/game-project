@@ -9,9 +9,11 @@ var debug = false;
 var random = 0;
 
 //AABB
+var isNear = 4;  // Min distance before we want to compare objects
 var heroPosition;
 // var collision = false;  // If hero runs into object
 // var collisionDistance = [999, 999, 999];
+var keydown_move = false;
 var collisionObjects = [];  // Array of objects after the collition has occured
 var collisionLocation_sphere = [maxObjects];   // An array of objects current location.  Give each object an ID
 var collisionLocation = [maxObjects];   // An array of objects current location.  Give each object an ID
@@ -304,6 +306,9 @@ window.onload = function init() {
         e = e || window.event;
         var key = e.which;
         var timer = keymap[key];
+        if (key == 38 || key == 40)
+            keydown_move = false;
+
         if(timer){
             clearInterval(timer);
             delete keymap[key];
@@ -373,6 +378,7 @@ window.onload = function init() {
         ////////////////////////////////////////////////////////////////
 
         function upArrow(speedAdjust) {
+            keydown_move = true;
             var collision = collisionDetectionSPhere(futureX, futureY, futureZ);
 
             if(!collision){
@@ -381,6 +387,7 @@ window.onload = function init() {
         }
 
         function downArrow(speedAdjust) {
+            keydown_move = true;
             var collision = collisionDetectionSPhere(-futureX, -futureY, -futureZ);
 
             if(!collision){
@@ -432,7 +439,8 @@ window.onload = function init() {
 
 
 function collisionDetectionSPhere(fx, fy, fz) {
-    var isNear = 4;
+    
+
 
     for(var i = 1; i < collisionLocation_sphere.length; i++){
         // Only process near objects
@@ -448,8 +456,6 @@ function collisionDetectionSPhere(fx, fy, fz) {
                 return true;
             }
         }
-
-
 
     }  // End for loop
     return false;

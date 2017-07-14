@@ -14,9 +14,12 @@ var render = function () {
     pMatrix = perspective(fovy, aspect, near, far);
 
     // Rotation  Speed
-    xAxis += 0.5; // x axis
-    yAxis += 0.5;  // y axis
-    zAxis += 0.5;  // z axis
+    var rotationSpeed = 0.5
+    xAxis += rotationSpeed; // x axis
+    yAxis += rotationSpeed;  // y axis
+    zAxis += rotationSpeed;  // z axis
+
+
 
     ///////////////  Render Objects   //////////////////////
     /**
@@ -51,6 +54,7 @@ var render = function () {
     aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
     aabb_matrix = mult(aabb_matrix, translate(hero[3]));
     heroPosition = aabb_spherePosition(hero[0], aabb_matrix );
+
 
 
     renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix, 0);
@@ -99,8 +103,17 @@ var render = function () {
             var position = aabb_spherePosition(shape, aabb_matrix );
             collisionLocation_sphere[id] = position;
 
-
+            // Freeze an object if it runs into you
+            if(position[2] < isNear ){
+                var collision = aabb_sphere_sphere_detection(heroPosition, position);
+                if(collision){
+                    trans[0] = subtract(position[0], movementMatrix) ;
+                    trans[1] = vec3(0,0,0);
+                    arr[3] = trans;
+                }
+            }
         }
+
 
         renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
 
