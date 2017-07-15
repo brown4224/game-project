@@ -20,6 +20,104 @@ function aabb_INIT() {
 
 }
 
+
+/////////////////////    Position //////////////////////////////
+
+function getRadius(typeObject) {
+    //  Hard code radius
+    // var sp_radius = aabb_radius;
+
+    // // var radius;
+    switch (typeObject) {
+        case 0:  //cube
+            sp_radius = aabb_CubeRadius;
+            break;
+        case 1:  //Sphere
+            sp_radius = aabb_SphereRadius;
+            break;
+        case 2:  //Ground
+            sp_radius = aabb_SphereRadius;
+
+            console.log("There was an error.  Ground doesn't have a radius")
+            break;
+        case 3:  //Cone
+            sp_radius = aabb_ConeRadius;
+            break;
+        default:
+            sp_radius = aabb_SphereRadius;
+    }
+    return sp_radius;
+}
+
+function aabb_spherePosition(matrix) {
+
+    var orgian = vec4(0.0, 0.0, 0.0, 1.0);
+    var pos = mult(matrix, orgian);
+    return vec3(pos[0], pos[1], pos[2]);
+}
+function aabb_boxPosition(typeObject, matrix) {
+    var current;
+    switch (typeObject){
+        case 0:  //cube
+            current = aabb_CubeVertices;
+            break;
+        case 1:  //Sphere
+            current = aabb_SphereVertices;
+            break;
+        case 2:  //Cone
+            current = aabb_ConeVertices;
+            break;
+        default:
+            current = aabb_CubeVertices;
+    }
+
+    var min = mult(matrix, current[0]);
+    var max = mult(matrix, current[1]);
+
+    min = vec3(min[0], min[1], min[2]);
+    max = vec3(max[0], max[1], max[2]);
+
+    return [  min, max  ];
+}
+/////////////////////    Detection //////////////////////////////
+function aabb_box_box_detection(box1, box2) {
+
+    // ALT VERSION
+    //  Returns TRUE or FALSE
+    return (
+        // X-axis
+        box1[1][0] >= box2[0][0] &&  // box1.max.x > box2.min.x
+        box1[0][0] <= box2[1][0] &&  // box1.min.x < box2.max.x
+
+        // Y-axis
+        box1[1][1] >= box2[0][1] &&  // box1.max.y > box2.min.y
+        box1[0][1] <= box2[1][1] &&  // box1.min.y < box2.max.y
+
+        // Z-axis
+        box1[1][2] >= box2[0][2] &&  // box1.max.z > box2.min.z
+        box1[0][2] <= box2[1][2]     // box1.min.z < box2.max.z
+    );
+
+}
+
+function aabb_sphere_box_detection(sphere1, box) {}
+
+function aabb_sphere_sphere_detection(sphere1, sphere2) {
+    var results = distance(sphere1[0], sphere2[0]);
+    var sumRadius = sphere1[1] + sphere2[1];
+
+    return (results < sumRadius);
+}
+
+function aabb_distance_detection(box1, box2) {
+    var maxDist = aabb_box_distance_vector(box1, box2);
+    if( maxValue(maxDist) <= 0)
+        return true;
+
+    return false;
+}
+
+/////////////////////    Bounding Box //////////////////////////////
 function aabb_boundingBoxCube(item) {
     /**
      * Created by Sean on 7/5/2017.
@@ -68,65 +166,7 @@ function aabb_boundingBoxCone(coneRadius, coneBase, coneHeight){
     return [  vec4(-coneRadius, coneBase, -coneRadius, 1.0), vec4(coneRadius, coneBase + coneHeight, coneRadius, 1.0)  ];
 }
 
-function aabb_boxPosition(typeObject, matrix) {
-    var current;
-    switch (typeObject){
-        case 0:  //cube
-            current = aabb_CubeVertices;
-            break;
-        case 1:  //Sphere
-            current = aabb_SphereVertices;
-            break;
-        case 2:  //Cone
-            current = aabb_ConeVertices;
-            break;
-        default:
-            current = aabb_CubeVertices;
-    }
-
-    var min = mult(matrix, current[0]);
-    var max = mult(matrix, current[1]);
-
-    min = vec3(min[0], min[1], min[2]);
-    max = vec3(max[0], max[1], max[2]);
-
-    return [  min, max  ];
-}
-
-function aabb_spherePosition(typeObject, matrix) {
-    //  Hard code radius
-    // var sp_radius = aabb_radius;
-
-    // var radius;
-    switch (typeObject) {
-        case 0:  //cube
-            sp_radius = aabb_CubeRadius;
-            break;
-        case 1:  //Sphere
-            sp_radius = aabb_SphereRadius;
-            break;
-        case 2:  //Ground
-            sp_radius = aabb_SphereRadius;
-
-            console.log("There was an error.  Ground doesn't have a radius")
-            break;
-        case 3:  //Cone
-            sp_radius = aabb_ConeRadius;
-            break;
-        default:
-            sp_radius = aabb_SphereRadius;
-    }
-    var orgian = vec4(0.0, 0.0, 0.0, 1.0);
-    var pos = mult(matrix, orgian);
-    pos =  vec3(pos[0], pos[1], pos[2]);
-
-    var orginDist =  distance(pos, vec3(0,0,0));
-
-    return [ pos, sp_radius, orginDist];
-
-}
-
-
+/////////////////////    Distance //////////////////////////////
 function distance(pnt1, pnt2) {
     var dist = subtract(pnt1, pnt2);
     return  Math.sqrt( dist[0] * dist[0] + dist[1] * dist[1] + dist[2] * dist[2]  );
@@ -147,48 +187,11 @@ function aabb_matrix_to_vector(matrix) {
 
 }
 
-function aabb_box_box_detection(box1, box2) {
-
-    // ALT VERSION
-    //  Returns TRUE or FALSE
-    return (
-        // X-axis
-        box1[1][0] >= box2[0][0] &&  // box1.max.x > box2.min.x
-        box1[0][0] <= box2[1][0] &&  // box1.min.x < box2.max.x
-
-        // Y-axis
-        box1[1][1] >= box2[0][1] &&  // box1.max.y > box2.min.y
-        box1[0][1] <= box2[1][1] &&  // box1.min.y < box2.max.y
-
-        // Z-axis
-        box1[1][2] >= box2[0][2] &&  // box1.max.z > box2.min.z
-        box1[0][2] <= box2[1][2]     // box1.min.z < box2.max.z
-    );
-
-}
-
-function aabb_sphere_box_detection(sphere1, box) {}
-
-function aabb_sphere_sphere_detection(sphere1, sphere2) {
-    var results = distance(sphere1[0], sphere2[0]);
-    var sumRadius = sphere1[1] + sphere2[1];
-
-    return (results < sumRadius);
-}
-
 function aabb_box_distance_vector(box1, box2) {
     var dist1 = subtract(box1[0], box2[1]);
     var dist2 = subtract(box2[0], box1[1]);
     return aabb_max_vector(dist1, dist2);
 
-}
-
-function aabb_distance_detection(box1, box2) {
-    var maxDist = aabb_box_distance_vector(box1, box2);
-    if( maxValue(maxDist) <= 0)
-        return true;
-
-    return false;
 }
 
 function aabb_max_vector (dist1, dist2) {

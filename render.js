@@ -49,14 +49,6 @@ var render = function () {
     mvMatrix = mult(mvMatrix, rotateY(hyAxis));
     mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
 
-    ////////////////////    AABB    //////////////////////////////
-    var aabb_matrix = mat4();
-    aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]) );
-    aabb_matrix = mult(aabb_matrix, translate(hero[3]));
-    heroPosition = aabb_spherePosition(hero[0], aabb_matrix );
-
-
-
     renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix, 0);
 
     // // Random Object
@@ -79,15 +71,15 @@ var render = function () {
         }
         var texFlag = 0.0;
         if (shape == 0 || shape == 2){
-            
+
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
                 configureTexture( image );
             }
-            
+
             texFlag = 1.0;
         }
-        
+
         /////////////////////////////////////////////////////////////////////
         /////////////  MATRIX MULTIPLICATION ///////////////////////////////
         // Look: Resets the position for each object
@@ -100,14 +92,21 @@ var render = function () {
         if (id > 0){
             var aabb_matrix = mat4();
             aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
-            var position = aabb_spherePosition(shape, aabb_matrix );
-            collisionLocation_sphere[id] = position;
+            var position = aabb_spherePosition(aabb_matrix );
+            collisionLocation_sphere[id].position = position;
+            collisionLocation_sphere[id].orginDistance = distance(position, vec3(0,0,0));
 
-            // Freeze an object if it runs into you
-            if(position[2] < isNear ){
-                var collision = aabb_sphere_sphere_detection(heroPosition, position);
+
+            // If object is close
+            if(collisionLocation_sphere[id].orginDistance < isNear ){
+                var collision = aabb_sphere_sphere_detection([heroPosition.center, radius], [collisionLocation_sphere[id].position, collisionLocation_sphere[id].radius]);
+
+                if(!collisionLocation_sphere[id].isNear)
+                    nearArray.push(id);
+
+                // Freeze an object if it runs into you
                 if(collision){
-                    trans[0] = subtract(position[0], movementMatrix) ;
+                    trans[0] = subtract(position, movementMatrix) ;
                     trans[1] = vec3(0,0,0);
                     arr[3] = trans;
                 }
@@ -183,10 +182,4 @@ function matrixMult(matrix, scaler, trans, axis) {
     return mult(matrix, translate(trans[1]));
 }
 
-// Pass a function 'funk' which draws a shape
-// Map the starting point and offset to shapes array
-function shapeMapper(funk, startIndex) {
-    funk();
-    var offset = pointsArray.length - startIndex;
-    shapeArray.push([startIndex, offset]);
-}
+

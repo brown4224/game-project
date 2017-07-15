@@ -13,7 +13,7 @@ function drawCone() {
     // Variables
     var c_verticalPosition = [];
     var c_color = 0;
-    var c_degree = 5;
+    var c_degree = 10;
     var c_organ = vec4(0.0, 0.0, 0.0, 1);
     var c_top = add(c_organ, vec4(0, c_height, 0, 1));
 
