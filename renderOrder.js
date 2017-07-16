@@ -29,10 +29,8 @@ function renderOrder() {
 
 
     ///////////////  HERO OBJECT   //////////////////////
-    // shape = 3;  // Car
     shape = 1;  //Sphere
 
-    // var heroScale = vec3(0.5, 0.5, 0.5);
     var heroPosition = vec3(0,0,0);
     hero =[  shape, true, defaultScale, heroPosition  ];
 

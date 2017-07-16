@@ -151,19 +151,25 @@ var render = function () {
         ////////////////////    AABB    //////////////////////////////
         var aabb_matrix = mat4();
         aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
+        var ramp_min = aabb_boxPosition_min(aabb_matrix, collisionLocation_ramps[id].corners );
+        collisionLocation_ramps[id].min = ramp_min;
+        var ramp_max = aabb_boxPosition_max(aabb_matrix, collisionLocation_ramps[id].corners );
+        collisionLocation_ramps[id].max = ramp_max;
 
-
-        var position = aabb_boxPosition(aabb_matrix, collisionLocation_ramps[id].corners );
-        collisionLocation_ramps[id].min = position[0];
-        collisionLocation_ramps[id].max = position[1];
-        var dist = closestCorner(position[0], position[1]);
+        var dist = closestCorner(ramp_min, ramp_max);
          collisionLocation_ramps[id].orginDistance = dist;
-
 
         if(dist < isNear && !collisionLocation_ramps[id].isNear) {
             console.log("Adding to near array");
             nearArray.push(new nearArrayObject(id, "ramp",collisionLocation_ramps ));
             collisionLocation_ramps[id].isNear = true;
+
+            console.log("Ramp min");
+            console.log(ramp_min);
+            console.log(collisionLocation_ramps[id].min);
+            console.log("Ramp Max");
+            console.log(ramp_max);
+            console.log(collisionLocation_ramps[id].max);
         }
 
 

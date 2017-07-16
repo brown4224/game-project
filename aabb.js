@@ -79,16 +79,15 @@ function aabb_spherePosition(matrix) {
     var pos = mult(matrix, orgian);
     return vec3(pos[0], pos[1], pos[2]);
 }
-function aabb_boxPosition(matrix, corners) {
-
-
+function aabb_boxPosition_min(matrix, corners) {
     var min = mult(matrix, corners[0]);
+    return  vec3(min[0], min[1], min[2]);
+
+}
+
+function aabb_boxPosition_max(matrix, corners) {
     var max = mult(matrix, corners[1]);
-
-    min = vec3(min[0], min[1], min[2]);
-    max = vec3(max[0], max[1], max[2]);
-
-    return [  min, max  ];
+    return vec3(max[0], max[1], max[2]);
 }
 /////////////////////    Detection //////////////////////////////
 function aabb_boundingBox_detection(box1, box2) {
@@ -188,9 +187,12 @@ function distance(pnt1, pnt2) {
 function closestCorner(minPosition, maxPosition) {
     // Compare the two extreem corners of the object
 
-    maxPosition[1] = minPosition[1];
-    var dist1 = distance(minPosition, vec3(0,0,0));
-    var dist2 = distance(maxPosition, vec3(0,0,0));
+    // Copy the variables before changing
+    var newMin = minPosition;
+    var newMax = maxPosition;
+
+    var dist1 = distance(newMin, vec3(0,0,0));
+    var dist2 = distance(newMax, vec3(0,0,0));
     var dist = dist1;
     if (dist1 > dist2)
         dist = dist2;

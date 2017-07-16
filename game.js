@@ -9,7 +9,7 @@ var debug = false;
 var random = 0;
 
 //AABB
-var isNear = 4;  // Min distance before we want to compare objects
+var isNear = 5;  // Min distance before we want to compare objects
 var nearArray =[];
 var heroPosition;
 var keydown_move = false;
@@ -275,7 +275,7 @@ window.onload = function init() {
         return setInterval(function () {
             var dxNight = 1;
             var dxLight = 0.05;
-            if(isNight && lightAmbient[0] > 0.0 ){
+            if(isNight && lightAmbient[0] > 0.1 ){
                 dxNight = -1;
                 nightTransition(dxLight, dxNight);
             } else if (!isNight && lightAmbient[0] < 1.0){
@@ -420,7 +420,7 @@ window.onload = function init() {
 
         function upArrow(speedAdjust) {
             keydown_move = true;
-            var collision = collisionDetectionSPhere(futureX, futureY, futureZ);
+            var collision = collisionDetection(futureX, futureY, futureZ);
 
             if(!collision){
                 move(1);
@@ -429,7 +429,7 @@ window.onload = function init() {
 
         function downArrow(speedAdjust) {
             keydown_move = true;
-            var collision = collisionDetectionSPhere(-futureX, -futureY, -futureZ);
+            var collision = collisionDetection(-futureX, -futureY, -futureZ);
 
             if(!collision){
                 move(-1);
@@ -476,52 +476,3 @@ window.onload = function init() {
 
     render();
 };
-
-
-function collisionDetectionSPhere(fx, fy, fz) {
-
-    for(var i = 0; i < nearArray.length; i++){
-        console.log("near array");
-        console.log(nearArray);
-
-        var key = nearArray[i].key; // Map to an array
-        var array = nearArray[i].array; // the  array callback
-        var collitionType = nearArray[i].type; // Map to an array
-        console.log(collitionType);
-
-        if(array[key].orginDistance > isNear){
-            console.log("Removing From array")
-            //remove from array
-            nearArray.splice(i, 1);  //  remove (index start, number of items)
-            array[key].isNear = false;
-        }
-
-        // Otherwise Process
-        else if(collitionType == "sphere") {
-            // Grab object anc calculate future position
-            var r = array[key].radius;
-            var pos = array[key].position;
-            pos = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
-
-            var results = aabb_sphere_sphere_detection([heroPosition.center, heroPosition.radius] , [pos, r ]);
-            if (results){
-                return true;
-            }
-        } else if(collitionType == "ramp") {
-            var posMin = array[key].min;
-            // var posMin = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
-
-             var posMax = array[key].max;
-            // var posMax = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
-
-            // console.log(nearArray);
-            var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max] , [posMin, posMax]);
-            if (results){
-                return true;
-            }
-        }
-
-    }  // End for loop
-    return false;
-
-}
