@@ -37,8 +37,10 @@ var defaultSpeed = 0.1;
 var speed = defaultSpeed;
 var acceleration = 0.005;  // Use small values
 var turnSpeed = 5;   // Measured in Degrees
-var  keymap = [];  // Stores callback functions.  Not numbers
-
+var keymap = [];  // Stores callback functions.  Not numbers
+var gravity = 0.01; //Constant that is subtracting from Y movementMatrix
+var y_speed = 0; //Actual jump speed (increase to start jump or ramp)
+var bunny_jump_flag = 0; //Prevents the car from jumping more than once if spacebar is held
 
 // Rotate  Variables
 var xAxis = 0; var yAxis = 0; var zAxis = 0;  // Global
@@ -316,12 +318,32 @@ window.onload = function init() {
         var timer = keymap[key];
         if (key == 38 || key == 40)
             keydown_move = false;
-
+        
+        if (key == 32) { //Prevents "bunny-jumping"
+            bunny_jump_flag = 0;
+        }
+        
         if(timer){
             clearInterval(timer);
             delete keymap[key];
         }
     }
+    
+    
+    function car_gravity(){
+        
+        movementMatrix[1] -= y_speed;
+        y_speed -= gravity;
+        
+        if(movementMatrix[1] >= 0.0 && y_speed < 0) {
+            y_speed = 0;
+            movementMatrix[1] = 0;
+            clearInterval(car_gravity);
+        }
+    }
+    
+    
+    
 
     var keyDownCallBackSpeed = 30;
 
@@ -343,12 +365,25 @@ window.onload = function init() {
         e = e || window.event;
         e.preventDefault();
         var key = e.which;
-        if(!keymap[key]){
-            keymap[key] = setInterval(function () {
-                repeateKeyDown(key);
-            }, keyDownCallBackSpeed);
-        } else {
+        
+        if (key == 32 && y_speed == 0.0 && bunny_jump_flag == 0) { //Spacebar - set initial 'jump' speed
+            y_speed = 0.15;
+            bunny_jump_flag = 1;
+            car_gravity();
+            
+            setInterval(function () { //Repeatedly calling gravity
+                car_gravity();
+            }, 1);
+        }
+        else{
+        
+            if(!keymap[key]){
+                keymap[key] = setInterval(function () {
+                    repeateKeyDown(key);
+                }, keyDownCallBackSpeed);
+            } else {
             // Nothing to do
+            }
         }
     }
 
@@ -360,7 +395,7 @@ window.onload = function init() {
         // Calculate futer location on user input
         var futureX =   speed * Math.sin(theta);
         var futureY =   0;
-        var futureZ =  speed *  Math.cos(theta);
+        var futureZ =   speed *  Math.cos(theta);
 
 
         var rotationSpeed = 50 * speed;
@@ -378,8 +413,6 @@ window.onload = function init() {
         if ( key == 37) {  // left arrow
             leftArrow(turnSpeed);
         }
-
-
 
         ////////////////////////////////////////////////////////////////
         //////////////    Arrow Functions   ///////////////////////////
