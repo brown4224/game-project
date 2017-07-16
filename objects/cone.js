@@ -40,6 +40,7 @@ function drawCone() {
 
         pointsArray.push(pt);
         normalsArray.push(normal);
+        texCoordsArray.push(texCoord[0]); //Temp values
         addColor();
 
         if (c_count > 0){
@@ -49,6 +50,10 @@ function drawCone() {
             normalsArray.push(normal);
             normalsArray.push(normal);
 
+            texCoordsArray.push(texCoord[1]); //Temp values
+            texCoordsArray.push(texCoord[2]); //Temp values
+
+
             addColor();
             addColor();
         }
@@ -57,6 +62,7 @@ function drawCone() {
     // Remove Extra Point
     pointsArray.pop();
     colorsArray.pop();
+    texCoord.pop();
 
     var c_first = c_verticalPosition[c_count -1];
     var c_last = c_verticalPosition[0];
@@ -84,6 +90,7 @@ function drawCone() {
 
     // Add first point before starting loop
     pointsArray.push(c_first);
+    texCoordsArray.push(texCoord[1]);
     var previous = c_first;
     addColor();
     c_verticalPosition.pop();

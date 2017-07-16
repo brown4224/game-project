@@ -35,6 +35,13 @@ function renderOrder() {
     // var heroScale = vec3(0.5, 0.5, 0.5);
     var heroPosition = vec3(0,0,0);
     hero =[  shape, true, defaultScale, heroPosition  ];
+
+
+    ///////////////  Ramps   //////////////////////
+    shape = 3;
+    trans = [vec3(5,0,5), defaultTranslation];
+    ramps.push([  shape, true, defaultScale, trans, [false, false, false]  ]);
+
     
     ///////////////  DRAW GROUND   //////////////////////
     historyArray.push([  2, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false] ]);

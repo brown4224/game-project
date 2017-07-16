@@ -9,13 +9,13 @@ var debug = false;
 var random = 0;
 
 //AABB
-var isNear = 2;  // Min distance before we want to compare objects
+var isNear = 4;  // Min distance before we want to compare objects
 var nearArray =[];
 var heroPosition;
 var keydown_move = false;
 var collisionObjects = [];  // Array of objects after the collition has occured
 var collisionLocation_sphere = [maxObjects];   // An array of objects current location.  Give each object an ID
-var collisionLocation = [maxObjects];   // An array of objects current location.  Give each object an ID
+var collisionLocation_ramps = [];   // An array of objects current location.  Give each object an ID
 
 var collitionReady = false;  // Turn on after first render
 
@@ -28,6 +28,7 @@ var shapeArray = [];  // CUBE, SPHERE, CONE: [START, OFFset]
 var historyArray = [];
 var hero = [];
 var colorsArray = [];
+var ramps = [];
 
 // Movement  and keymapping
 var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
@@ -143,7 +144,11 @@ window.onload = function init() {
     shapeMapper(drawCube);
     shapeMapper(drawSphere);
     shapeMapper(drawGround);
-    shapeMapper(drawCone);
+    // shapeMapper(drawCone);
+    shapeMapper(drawRamp);
+    console.log("Shapes arra");
+    console.log(shapeArray);
+
 
     // Pass a function 'funk' which draws a shape
     // Map the starting point and offset to shapes array
@@ -155,7 +160,7 @@ window.onload = function init() {
     }
 
 
-    drawCar();
+    // drawCar();
     aabb_INIT();
     renderOrder();
     initDataStructures();
@@ -443,22 +448,41 @@ window.onload = function init() {
 function collisionDetectionSPhere(fx, fy, fz) {
 
     for(var i = 0; i < nearArray.length; i++){
+        console.log("near array");
+        console.log(nearArray);
 
-        var key = nearArray[i]; // Map to an array
-        if(collisionLocation_sphere[key].orginDistance > isNear){
+        var key = nearArray[i].key; // Map to an array
+        var array = nearArray[i].array; // the  array callback
+        var collitionType = nearArray[i].type; // Map to an array
+        console.log(collitionType);
+
+        if(array[key].orginDistance > isNear){
+            console.log("Removing From array")
             //remove from array
             nearArray.splice(i, 1);  //  remove (index start, number of items)
+            array[key].isNear = false;
+        }
 
-
-
-            // Otherwise Process
-        }else {
+        // Otherwise Process
+        else if(collitionType == "sphere") {
             // Grab object anc calculate future position
-            var r = collisionLocation_sphere[key].radius;
-            var pos = collisionLocation_sphere[key].position;
+            var r = array[key].radius;
+            var pos = array[key].position;
             pos = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
 
             var results = aabb_sphere_sphere_detection([heroPosition.center, heroPosition.radius] , [pos, r ]);
+            if (results){
+                return true;
+            }
+        } else if(collitionType == "ramp") {
+            var posMin = array[key].min;
+            // var posMin = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
+
+             var posMax = array[key].max;
+            // var posMax = vec3(pos[0] + fx, pos[1] + fy,  pos[2] + fz);  // Future Position
+
+            // console.log(nearArray);
+            var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max] , [posMin, posMax]);
             if (results){
                 return true;
             }

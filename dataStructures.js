@@ -6,21 +6,44 @@ function initDataStructures() {
     for(i = 0; i < historyArray.length; i++){
         var r = getRadius(historyArray[0]);
         collisionLocation_sphere[i] = new sphereBoundingBox(i, r);
-
     }
+
+    for(i = 0; i < ramps.length; i++){
+        var shape = ramps[0];
+        collisionLocation_ramps.push(new boundingBox(i, getCorners(shape)))
+    }
+
+
 }
 
 function heroObj(shape) {
     this.center = vec3(0,0,0);
     this.radius =  getRadius(shape);
-    this.min = vec3();
-    this.max = vec3();
+    this.corners = getCorners(shape);
+    this.min = this.corners[0];
+    this.max = this.corners[1];
 }
 
 function sphereBoundingBox(id, r) {
     this.id = id;
+    this.isNear = false;
     this.position = vec3();
     this.radius = r;
     this.orginDistance = 99;
 }
 
+function boundingBox(id, corners) {
+    this.id = id;
+    this.isNear = false;
+    this.min = vec3();
+    this.max = vec3();
+    this.corners = corners;  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
+    this.orginDistance = 99;
+}
+
+
+function nearArrayObject(key, type, array ) {
+    this.key = key;
+    this.type = type;
+    this.array = array;
+}

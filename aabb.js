@@ -2,6 +2,7 @@
 var aabb_CubeVertices;
 var aabb_SphereVertices;
 var aabb_ConeVertices;
+var aabb_RampVertices;
 
 var aabb_CubeRadius;
 var aabb_SphereRadius;
@@ -12,17 +13,40 @@ var aabb_radius = s_radius;  // If we want to hard code
 
 function aabb_INIT() {
     // AABB Colition
-    aabb_CubeVertices = aabb_boundingBoxCube(vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
+    aabb_CubeVertices = aabb_parse_generate_corners(vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
     aabb_CubeRadius = distance(aabb_CubeVertices[1], aabb_CubeVertices[0]) /2;
 
     aabb_SphereVertices = aabb_boundingBoxSphere(s_radius);
     aabb_SphereRadius = s_radius;
 
+    aabb_RampVertices = aabb_parse_generate_corners(ramp_vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
+    // No Spherical Detection
+
+    console.log("Corners");
+    console.log(aabb_RampVertices);
 }
 
 
 /////////////////////    Position //////////////////////////////
-
+function getCorners(typeObject) {
+    var current;
+    switch (typeObject){
+        case 0:  //cube
+            current = aabb_CubeVertices;
+            break;
+        case 1:  //Sphere
+            current = aabb_SphereVertices;
+            break;
+        case 2:  //Ground
+            break;
+        case 3:  //Ramp
+            current =aabb_RampVertices;
+            break;
+        default:
+            current = aabb_CubeVertices;
+    }
+    return current;
+}
 function getRadius(typeObject) {
     //  Hard code radius
     // var sp_radius = aabb_radius;
@@ -55,24 +79,11 @@ function aabb_spherePosition(matrix) {
     var pos = mult(matrix, orgian);
     return vec3(pos[0], pos[1], pos[2]);
 }
-function aabb_boxPosition(typeObject, matrix) {
-    var current;
-    switch (typeObject){
-        case 0:  //cube
-            current = aabb_CubeVertices;
-            break;
-        case 1:  //Sphere
-            current = aabb_SphereVertices;
-            break;
-        case 2:  //Cone
-            current = aabb_ConeVertices;
-            break;
-        default:
-            current = aabb_CubeVertices;
-    }
+function aabb_boxPosition(matrix, corners) {
 
-    var min = mult(matrix, current[0]);
-    var max = mult(matrix, current[1]);
+
+    var min = mult(matrix, corners[0]);
+    var max = mult(matrix, corners[1]);
 
     min = vec3(min[0], min[1], min[2]);
     max = vec3(max[0], max[1], max[2]);
@@ -80,7 +91,7 @@ function aabb_boxPosition(typeObject, matrix) {
     return [  min, max  ];
 }
 /////////////////////    Detection //////////////////////////////
-function aabb_box_box_detection(box1, box2) {
+function aabb_boundingBox_detection(box1, box2) {
 
     // ALT VERSION
     //  Returns TRUE or FALSE
@@ -100,7 +111,7 @@ function aabb_box_box_detection(box1, box2) {
 
 }
 
-function aabb_sphere_box_detection(sphere1, box) {}
+// function aabb_sphere_box_detection(sphere1, box) {}
 
 function aabb_sphere_sphere_detection(sphere1, sphere2) {
     var results = distance(sphere1[0], sphere2[0]);
@@ -118,7 +129,9 @@ function aabb_distance_detection(box1, box2) {
 }
 
 /////////////////////    Bounding Box //////////////////////////////
-function aabb_boundingBoxCube(item) {
+
+// Return two vetors:  min corner and max corner
+function aabb_parse_generate_corners(item) {
     /**
      * Created by Sean on 7/5/2017.
      */
@@ -132,7 +145,7 @@ function aabb_boundingBoxCube(item) {
     var minZ = 9999;
     var maxZ = -9999;
 
-    for(var i=0; i < vertices.length; i++){
+    for(var i=0; i < item.length; i++){
         // X Values
         if(item[i][0] < minX)
             minX = item[i][0];
@@ -152,8 +165,7 @@ function aabb_boundingBoxCube(item) {
             maxZ = item[i][2];
     }
 
-    // Return two vetors:  min corner and max corner
-    return [  vec4(minX, minY, minZ, 1.0), vec4(minX, minY, maxZ, 1.0)  ];
+    return [  vec4(minX, minY, minZ, 1.0), vec4(maxX, maxX, maxZ, 1.0)  ];
 }
 
 function aabb_boundingBoxSphere(aabb_radius) {
@@ -171,6 +183,19 @@ function distance(pnt1, pnt2) {
     var dist = subtract(pnt1, pnt2);
     return  Math.sqrt( dist[0] * dist[0] + dist[1] * dist[1] + dist[2] * dist[2]  );
 
+}
+
+function closestCorner(minPosition, maxPosition) {
+    // Compare the two extreem corners of the object
+
+    maxPosition[1] = minPosition[1];
+    var dist1 = distance(minPosition, vec3(0,0,0));
+    var dist2 = distance(maxPosition, vec3(0,0,0));
+    var dist = dist1;
+    if (dist1 > dist2)
+        dist = dist2;
+
+    return dist;
 }
 
 function aabb_matrix_to_vector(matrix) {

@@ -101,9 +101,10 @@ var render = function () {
             if(collisionLocation_sphere[id].orginDistance < isNear ){
                 var collision = aabb_sphere_sphere_detection([heroPosition.center, radius], [collisionLocation_sphere[id].position, collisionLocation_sphere[id].radius]);
 
-                if(!collisionLocation_sphere[id].isNear)
-                    nearArray.push(id);
-
+                if(!collisionLocation_sphere[id].isNear) {
+                    nearArray.push(new nearArrayObject(id, "sphere", collisionLocation_sphere));
+                    collisionLocation_sphere[id].isNear = true;
+                }
                 // Freeze an object if it runs into you
                 if(collision){
                     trans[0] = subtract(position, movementMatrix) ;
@@ -111,6 +112,58 @@ var render = function () {
                     arr[3] = trans;
                 }
             }
+        }
+
+
+        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
+
+
+    }
+
+    // Ramp
+    var size = ramps.length;
+    for (var i = 0; i < size; i++) {
+        var arr = ramps[i];
+        var id = i;
+        var shape = arr[0];
+        var flagValue = arr[1];
+        var scaler = arr[2];
+        var trans = arr[3];
+        var axis = arr[4];
+
+        var texFlag = 0.0;
+        if (shape == 0 || shape == 2  ){
+
+            if(image != texture_constants[shape]){
+                image = texture_constants[shape];
+                configureTexture( image );
+            }
+
+            texFlag = 1.0;
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////  MATRIX MULTIPLICATION ///////////////////////////////
+        // Look: Resets the position for each object
+        mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
+        mvMatrix = matrixMult(mvMatrix, scaler, trans, axis);
+
+        ////////////////////    AABB    //////////////////////////////
+        var aabb_matrix = mat4();
+        aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
+
+
+        var position = aabb_boxPosition(aabb_matrix, collisionLocation_ramps[id].corners );
+        collisionLocation_ramps[id].min = position[0];
+        collisionLocation_ramps[id].max = position[1];
+        var dist = closestCorner(position[0], position[1]);
+         collisionLocation_ramps[id].orginDistance = dist;
+
+
+        if(dist < isNear && !collisionLocation_ramps[id].isNear) {
+            console.log("Adding to near array");
+            nearArray.push(new nearArrayObject(id, "ramp",collisionLocation_ramps ));
+            collisionLocation_ramps[id].isNear = true;
         }
 
 
