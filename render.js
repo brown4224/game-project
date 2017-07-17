@@ -161,7 +161,6 @@ var render = function () {
 
 
     for (var i = 0; i < projectileArray.length; i++) {
-        // var arr = ramps[i];
         var bullet = projectileArray[i];
         if (!bullet.render)
             continue;
@@ -176,7 +175,7 @@ var render = function () {
         var axis = [false,false,false];
 
         var texFlag = 0.0;
-        if (shape == 0 || shape == 2  ){
+        if (shape == 0  || shape == 1 || shape == 3 ){
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];

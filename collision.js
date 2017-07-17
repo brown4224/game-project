@@ -22,8 +22,9 @@ function collisionDetection(fx, fy, fz) {
 
             var results = aabb_sphere_sphere_detection([heroPosition.center, heroPosition.radius], [pos, r]);
             if (results) {
-                return true;
                 speed /= 2;
+                return true;
+
             }
         } else if (collitionType == "ramp") {
             var posMin = array[key].min;

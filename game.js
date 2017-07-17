@@ -473,7 +473,7 @@ window.onload = function init() {
 
 
     function fire() {
-        projectileArray.push( new bullet(1, projectileArray.length ));
+        projectileArray.push( new bullet(2, projectileArray.length ));
         var b = projectileArray[projectileArray.length -1];
         b.callback = setInterval(function () {
             if(b.count > 0){
