@@ -30,6 +30,7 @@ var hero = [];
 var colorsArray = [];
 var ramps = [];
 
+
 // Movement  and keymapping
 var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
 var maxSpeed = 0.4;
@@ -41,6 +42,13 @@ var keymap = [];  // Stores callback functions.  Not numbers
 var gravity = 0.01; //Constant that is subtracting from Y movementMatrix
 var y_speed = 0; //Actual jump speed (increase to start jump or ramp)
 var bunny_jump_flag = 0; //Prevents the car from jumping more than once if spacebar is held
+
+
+// Projectiles
+var projectileArray = [];
+var projectileSpeed = 10 * defaultSpeed;
+var projectileMatrix = [];
+
 
 // Rotate  Variables
 var xAxis = 0; var yAxis = 0; var zAxis = 0;  // Global
@@ -148,8 +156,7 @@ window.onload = function init() {
     shapeMapper(drawGround);
     // shapeMapper(drawCone);
     shapeMapper(drawRamp);
-    console.log("Shapes arra");
-    console.log(shapeArray);
+
 
 
     // Pass a function 'funk' which draws a shape
@@ -365,6 +372,10 @@ window.onload = function init() {
         e = e || window.event;
         e.preventDefault();
         var key = e.which;
+
+        if ( key == 70){  // 'f' Key
+            fire();
+        }
         
         if (key == 32 && y_speed == 0.0 && bunny_jump_flag == 0) { //Spacebar - set initial 'jump' speed
             y_speed = 0.15;
@@ -385,6 +396,7 @@ window.onload = function init() {
             // Nothing to do
             }
         }
+
     }
 
     function repeateKeyDown(key) {
@@ -413,6 +425,7 @@ window.onload = function init() {
         if ( key == 37) {  // left arrow
             leftArrow(turnSpeed);
         }
+
 
         ////////////////////////////////////////////////////////////////
         //////////////    Arrow Functions   ///////////////////////////
@@ -453,11 +466,26 @@ window.onload = function init() {
             hxAxis += direction * rotationSpeed *  Math.cos(theta);
         }
 
-
-
-
-
     }
+
+
+    function fire() {
+        projectileArray.push( new bullet(1, projectileArray.length ));
+        var b = projectileArray[projectileArray.length -1];
+        b.callback = setInterval(function () {
+            if(b.count > 0){
+                b.projectileMovement = vec3(b.projectileMovement[0] + b.direction[0], b.projectileMovement[1] + b.direction[1], b.projectileMovement[2] + b.direction[2]);
+                b.count--;
+
+            } else {
+                clearInterval(b.callback);
+                console.log("Remove from array");
+                b.render = false;
+                projectileArray.slice(b.id, 1);
+            }
+        }, 5);
+    }
+
     ///////////////  Mouse   //////////////////////
     // var gc = document.getElementById("gl-canvas");
     //

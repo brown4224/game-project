@@ -18,7 +18,7 @@
  *                  This flag determine which axis will be rotated.
  */
 
-var maxObjects = 12;
+var maxObjects = 2;
 
 function renderOrder() {
     var shape;

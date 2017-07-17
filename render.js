@@ -14,7 +14,7 @@ var render = function () {
     pMatrix = perspective(fovy, aspect, near, far);
 
     // Rotation  Speed
-    var rotationSpeed = 0.5
+    var rotationSpeed = 0.5;
     xAxis += rotationSpeed; // x axis
     yAxis += rotationSpeed;  // y axis
     zAxis += rotationSpeed;  // z axis
@@ -160,23 +160,77 @@ var render = function () {
          collisionLocation_ramps[id].orginDistance = dist;
 
         if(dist < isNear && !collisionLocation_ramps[id].isNear) {
-            console.log("Adding to near array");
             nearArray.push(new nearArrayObject(id, "ramp",collisionLocation_ramps ));
             collisionLocation_ramps[id].isNear = true;
-
-            console.log("Ramp min");
-            console.log(ramp_min);
-            console.log(collisionLocation_ramps[id].min);
-            console.log("Ramp Max");
-            console.log(ramp_max);
-            console.log(collisionLocation_ramps[id].max);
         }
 
+        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
+    }
+
+    /////////////////////////////////////////////////////////////////////
+    /////////////  Projectile  ///////////////////////////////
+
+
+    for (var i = 0; i < projectileArray.length; i++) {
+        // var arr = ramps[i];
+        var bullet = projectileArray[i];
+        if (!bullet.render)
+            continue;
+
+        // Position adjust from movement matrix
+        var newPos = vec3(bullet.projectileMovement[0] - movementMatrix[0], bullet.projectileMovement[1] - movementMatrix, bullet.projectileMovement[2] - movementMatrix);
+
+        var shape = bullet.shape;
+        var flagValue = true;
+        var scaler = bullet.scaler;
+        var trans = [bullet.projectileMovement, vec3(0,0,0)];
+        var axis = [false,false,false];
+
+        var texFlag = 0.0;
+        if (shape == 0 || shape == 2  ){
+
+            if(image != texture_constants[shape]){
+                image = texture_constants[shape];
+                configureTexture( image );
+            }
+
+            texFlag = 1.0;
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////  MATRIX MULTIPLICATION ///////////////////////////////
+        // Look: Resets the position for each object
+        mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
+        mvMatrix = matrixMult(mvMatrix, scaler, trans, axis);
+
+        ////////////////////    AABB    //////////////////////////////
+        var aabb_matrix = mat4();
+        aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
+        var position = aabb_spherePosition(aabb_matrix );
+        projectileArray[i].position = position;
+
+
+        // If object is close
+        // for(var j=1; j < historyArray.length; j++){
+        //     // Need to ray trace or use zones
+        //     // Write something more efficent later
+        //     var target = collisionLocation_sphere[j];
+        //     var results = aabb_sphere_sphere_detection([bullet.position, bullet.radius], [j.position, j.radius]);
+        //     if(radius){
+        //         // Kill object
+        //         collisionLocation_sphere.splice(j, 1);
+        //         historyArray.slice(j, 1);
+        //         // Kill bullet
+        //         clearInterval(bullet.callback);
+        //         projectileArray.slice(i, 1);
+        //         i--;
+        //         continue;
+        //     }
+        // }
 
         renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
-
-
     }
+
 
     /**
      * Turns on collision detection system.

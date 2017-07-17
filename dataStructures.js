@@ -47,3 +47,20 @@ function nearArrayObject(key, type, array ) {
     this.type = type;
     this.array = array;
 }
+
+function bullet(shape, id) {
+    this.id = id;
+    this.render = true;
+    this.shape = shape;
+    this.count = 40;  // Time to live
+    this.size = 0.5;
+    this.scaler = vec3(this.size, this.size, this.size);
+    this.direction =   new vec3(   -projectileSpeed * Math.sin(theta),  0,  -projectileSpeed *  Math.cos(theta));
+    this.projectileMovement = new vec3(-movementMatrix[0], -movementMatrix[1], -movementMatrix[2]);
+
+    // Position Data
+    this.radius =  getRadius(shape) * this.size;
+    this.position = vec3(0,0,0);
+
+
+}
