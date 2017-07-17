@@ -1,3 +1,7 @@
+var carMin = vec3();
+var carMax = vec3();
+
+
 function drawCar() {
     ///////////////  IMPORT CAR   //////////////////////
     /**
@@ -12,6 +16,19 @@ function drawCar() {
      *
      * We still need to make a texture mapper.  Nick can finish the car.
      */
+
+
+    var minX = 9999;
+    var maxX = -9999;
+
+    var minY = 9999;
+    var maxY = -9999;
+
+    var minZ = 9999;
+    var maxZ = -9999;
+
+
+
         // Add mesh verticies to our points array
         // Give the car a shape ID
     var objStr = document.getElementById('car.obj').innerHTML;
@@ -39,6 +56,25 @@ carMesh.vertexText
         colorsArray.push(vertexColors[4]);;
         colorCount  =   ++colorCount % 6;
 
+
+
+
+        /// Calculate Min and Max
+        if(carMesh.vertices[indices_0] < minX)
+            minX = carMesh.vertices[indices_0];
+        if(carMesh.vertices[indices_0] > maxX)
+            maxX = carMesh.vertices[indices_0];
+
+        if(carMesh.vertices[indices_1] < minY)
+            minY = carMesh.vertices[indices_1];
+        if(carMesh.vertices[indices_1] > maxY)
+            maxY = carMesh.vertices[indices_1];
+
+        if(carMesh.vertices[indices_2] < minZ)
+            minZ = carMesh.vertices[indices_2];
+        if(carMesh.vertices[indices_2] > maxY)
+            maxZ = carMesh.vertices[indices_2];
+
     }
     //var offset = pointsArray.length - start;
     //shapeArray.push([start, offset]);
@@ -47,5 +83,12 @@ carMesh.vertexText
 
     //console.log("Shape Array");
     console.log(pointsArray.length);
+
+    console.log(pointsArray.length);
+    carMin = new vec3(minX, minY, minZ);
+    carMax = new vec3(maxX, maxY, maxZ);
+    console.log("Car Min and Max");
+    console.log(carMin);
+    console.log(carMax);
     
 }

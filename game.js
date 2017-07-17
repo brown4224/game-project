@@ -151,13 +151,17 @@ window.onload = function init() {
     // Imported from Cube File
     // Pass Draw Functions into helper function
 
+    /* DO NOT CHANGE OREDER*/
+    /* DO NOT CHANGE OREDER*/
     shapeMapper(drawCar);
     shapeMapper(drawCube);
     shapeMapper(drawSphere);
     shapeMapper(drawGround);
-    // shapeMapper(drawCone);
     shapeMapper(drawRamp);
-    shapeMapper(drawCar);
+
+    // shapeMapper(drawCone);
+    /* DO NOT CHANGE OREDER*/
+    /* DO NOT CHANGE OREDER*/
 
 
     // Pass a function 'funk' which draws a shape
@@ -451,10 +455,12 @@ window.onload = function init() {
         }
         function leftArrow(degreeTurn) {
             theta += (dr * degreeTurn);
+            // hyAxis = theta *  Math.PI;
 
         }
         function rightArrow(degreeTurn) {
             theta -= (dr * degreeTurn);
+            // hyAxis = theta *  Math.PI;
 
         }
 
@@ -462,10 +468,17 @@ window.onload = function init() {
             movementMatrix[0] += direction * futureX;
             movementMatrix[1] += direction * futureY;
             movementMatrix[2] += direction * futureZ;
-            // Object Rotation
-            hzAxis += direction * rotationSpeed *  Math.sin(theta);
-            hxAxis += direction * rotationSpeed *  Math.cos(theta);
-            
+            /**
+             * Object Rotation  - For sphere hero only
+             * DO NOT DELETE
+             *   hzAxis += direction * rotationSpeed *  Math.sin(theta);
+             *   hxAxis += direction * rotationSpeed *  Math.cos(theta);
+             *
+             */
+
+            // hzAxis += direction * rotationSpeed *  Math.sin(theta);
+            // hxAxis += direction * rotationSpeed *  Math.cos(theta);
+
             
         }
 

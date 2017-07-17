@@ -22,6 +22,13 @@ function heroObj(shape) {
     this.corners = getCorners(shape);
     this.min = this.corners[0];
     this.max = this.corners[1];
+
+    console.log("Hero Data Structure");
+    console.log("radius: " + this.radius);
+    console.log("min");
+    console.log(this.min);
+    console.log("max");
+    console.log(this.max);
 }
 
 function sphereBoundingBox(id, r) {

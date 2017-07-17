@@ -218,8 +218,10 @@ var render = function () {
 
         renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
     }
-    
-    
+
+    // Rotate Car
+    hyAxis = -theta * 180 / Math.PI;
+
     // Hero Object (Render last)
     mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
     mvMatrix = mult(mvMatrix, translate(hero[3]));

@@ -3,10 +3,14 @@ var aabb_CubeVertices;
 var aabb_SphereVertices;
 var aabb_ConeVertices;
 var aabb_RampVertices;
+var aabb_CarVertices;
+
 
 var aabb_CubeRadius;
 var aabb_SphereRadius;
 var aabb_ConeRadius;
+var aabb_CarRadius;
+
 
 
 var aabb_radius = s_radius;  // If we want to hard code
@@ -22,8 +26,9 @@ function aabb_INIT() {
     aabb_RampVertices = aabb_parse_generate_corners(ramp_vertices);  //  ARRAY: minX, maxX, minY, maxY, minZ, maxZ
     // No Spherical Detection
 
-    console.log("Corners");
-    console.log(aabb_RampVertices);
+    // Car Hero
+    aabb_CarVertices = [carMin, carMax];
+    aabb_CarRadius = distance(carMax, carMin) / 2;
 }
 
 
@@ -31,15 +36,18 @@ function aabb_INIT() {
 function getCorners(typeObject) {
     var current;
     switch (typeObject){
-        case 0:  //cube
+        case 0:  //Car
+            current = aabb_CarVertices;
+            break;
+        case 1:  //cube
             current = aabb_CubeVertices;
             break;
-        case 1:  //Sphere
+        case 2:  //Sphere
             current = aabb_SphereVertices;
             break;
-        case 2:  //Ground
+        case 3:  //Ground
             break;
-        case 3:  //Ramp
+        case 4:  //Ramp
             current =aabb_RampVertices;
             break;
         default:
@@ -54,17 +62,20 @@ function getRadius(typeObject) {
     // // var radius;
     switch (typeObject) {
         case 0:  //cube
+            sp_radius = aabb_CarRadius;
+            break;
+        case 1:  //cube
             sp_radius = aabb_CubeRadius;
             break;
-        case 1:  //Sphere
+        case 2:  //Sphere
             sp_radius = aabb_SphereRadius;
             break;
-        case 2:  //Ground
+        case 3:  //Ground
             sp_radius = aabb_SphereRadius;
 
             console.log("There was an error.  Ground doesn't have a radius")
             break;
-        case 3:  //Cone
+        case 4:  //Cone
             sp_radius = aabb_ConeRadius;
             break;
         default:
