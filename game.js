@@ -50,6 +50,9 @@ var projectileArray = [];
 var projectileSpeed = 10 * defaultSpeed;
 var projectileMatrix = [];
 
+//Sound
+var soundArray = [];
+
 
 // Rotate  Variables
 var xAxis = 0; var yAxis = 0; var zAxis = 0;  // Global
@@ -61,6 +64,7 @@ var near = 0.001;
 var far = 30.0;
 var radius = 10.0;
 var theta = 0;  // Radians
+var car_theta = 0; // Car's current movement
 var phi = 0.0;
 var dr = Math.PI / 180.0;
 
@@ -87,7 +91,7 @@ var nightTimer = 10000;  //  Timer Callback,  10 Seconds
 
 // Lighting
 var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
-var carLightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);  // Points away from car
+var carLightPosition = vec4(-radius * Math.sin(car_theta), 0.0, -radius * Math.cos(car_theta), 0.0);  // Points away from car
 var ambientColor, diffuseColor, specularColor;
 
 
@@ -194,6 +198,10 @@ window.onload = function init() {
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////
+    
+    
+    ///////////////////// LOAD SOUNDS ///////////////////////////////
+    soundArray.push(document.getElementById("laserSound"));
 
 
     ///////////////  COLOR BUFFER   //////////////////////
@@ -347,9 +355,12 @@ window.onload = function init() {
         movementMatrix[1] -= y_speed;
         y_speed -= gravity;
         
+        hxAxis -= y_speed * 10;
+        
         if(movementMatrix[1] >= 0.0 && y_speed < 0) {
             y_speed = 0;
             movementMatrix[1] = 0;
+            hxAxis = 0;
             clearInterval(gravity_callback);
         }
     }
@@ -410,10 +421,9 @@ window.onload = function init() {
             speed += acceleration;
         }
         // Calculate futer location on user input
-        var futureX =   speed * Math.sin(theta);
+        var futureX =   speed * Math.sin(car_theta);
         var futureY =   0;
-        var futureZ =   speed *  Math.cos(theta);
-
+        var futureZ =   speed *  Math.cos(car_theta);
 
         var rotationSpeed = 50 * speed;
 
@@ -443,6 +453,15 @@ window.onload = function init() {
             if(!collision){
                 move(1);
             }
+            
+            if(car_theta != theta){
+            if (car_theta > theta){
+                car_theta -= 0.1;
+            }
+            else{
+                car_theta += 0.1;
+            }
+            }
         }
 
         function downArrow(speedAdjust) {
@@ -451,6 +470,15 @@ window.onload = function init() {
 
             if(!collision){
                 move(-1);
+            }
+            
+            if(car_theta != theta){
+            if (car_theta > theta){
+                car_theta -= 0.1;
+            }
+            else{
+                car_theta += 0.1;
+            }
             }
         }
         function leftArrow(degreeTurn) {
@@ -480,12 +508,17 @@ window.onload = function init() {
             // hxAxis += direction * rotationSpeed *  Math.cos(theta);
 
             
+            // Object Rotation
+            //hzAxis += direction * rotationSpeed *  Math.sin(theta);
         }
 
     }
 
 
     function fire() {
+        
+        soundArray[0].play();
+        
         projectileArray.push( new bullet(2, projectileArray.length ));
         var b = projectileArray[projectileArray.length -1];
         b.callback = setInterval(function () {

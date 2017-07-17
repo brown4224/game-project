@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d54858f9-d36e-4b34-a82d-35eddd4c4990" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/sounds/laser.mp3" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/aabb.js" afterPath="$PROJECT_DIR$/aabb.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dataStructures.js" afterPath="$PROJECT_DIR$/dataStructures.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/objects/car.js" afterPath="$PROJECT_DIR$/objects/car.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/render.js" afterPath="$PROJECT_DIR$/render.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/renderOrder.js" afterPath="$PROJECT_DIR$/renderOrder.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -41,7 +37,7 @@
           <file leaf-file-name="render.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/render.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="326">
+                <state relative-caret-position="629">
                   <caret line="220" column="0" lean-forward="true" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
                   <folding>
                     <element signature="e#774#1759#0" expanded="false" />
@@ -59,8 +55,8 @@
           <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/game.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="822">
-                  <caret line="472" column="28" lean-forward="false" selection-start-line="472" selection-start-column="28" selection-end-line="472" selection-end-column="28" />
+                <state relative-caret-position="1023">
+                  <caret line="533" column="13" lean-forward="true" selection-start-line="533" selection-start-column="13" selection-end-line="533" selection-end-column="13" />
                   <folding />
                 </state>
               </provider>
@@ -362,12 +358,12 @@
       <workItem from="1500147522832" duration="22178000" />
       <workItem from="1500233194309" duration="3462000" />
       <workItem from="1500249518794" duration="13787000" />
-      <workItem from="1500320957444" duration="3280000" />
+      <workItem from="1500320957444" duration="3469000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180611000" />
+    <option name="totallyTimeSpent" value="180800000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1456" extended-state="6" />
@@ -769,9 +765,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/renderOrder.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="717">
+          <caret line="50" column="32" lean-forward="true" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/render.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
+        <state relative-caret-position="629">
           <caret line="220" column="0" lean-forward="true" selection-start-line="220" selection-start-column="0" selection-end-line="220" selection-end-column="0" />
           <folding>
             <element signature="e#774#1759#0" expanded="false" />
@@ -785,18 +789,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/renderOrder.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="717">
-          <caret line="50" column="32" lean-forward="true" selection-start-line="50" selection-start-column="32" selection-end-line="50" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="822">
-          <caret line="472" column="28" lean-forward="false" selection-start-line="472" selection-start-column="28" selection-end-line="472" selection-end-column="28" />
+        <state relative-caret-position="1023">
+          <caret line="533" column="13" lean-forward="true" selection-start-line="533" selection-start-column="13" selection-end-line="533" selection-end-column="13" />
           <folding />
         </state>
       </provider>
