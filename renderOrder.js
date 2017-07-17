@@ -29,26 +29,26 @@ function renderOrder() {
 
 
     ///////////////  HERO OBJECT   //////////////////////
-    shape = 1;  //Sphere
+    shape = 0;  //Sphere
 
-    var heroPosition = vec3(0,0,0);
-    hero =[  shape, true, defaultScale, heroPosition  ];
+    var heroPosition = vec3(0,-0.15,0);
+    hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition  ];
 
 
     ///////////////  Ramps   //////////////////////
-    shape = 3;
+    shape = 4;
     trans = [vec3(5,0,5), defaultTranslation];
     ramps.push([  shape, true, defaultScale, trans, [false, false, false]  ]);
 
     
     ///////////////  DRAW GROUND   //////////////////////
-    historyArray.push([  2, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false] ]);
+    historyArray.push([  3, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false] ]);
     console.log("Ground");
     console.log(historyArray[historyArray.length - 1]);
 
     ///////////////  RANDOM OBJECTS   //////////////////////
     for (var i = 0; i < maxObjects; i++){
-        shape = randomNumber(2, 0, false);
+        shape = randomNumber(3, 1, false);
         var trans;
         var translation = vec3(randomNumber(bounds, 1, true), 0, randomNumber(bounds, 1, true));
 

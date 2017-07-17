@@ -40,6 +40,7 @@ var acceleration = 0.005;  // Use small values
 var turnSpeed = 5;   // Measured in Degrees
 var keymap = [];  // Stores callback functions.  Not numbers
 var gravity = 0.01; //Constant that is subtracting from Y movementMatrix
+var gravity_callback;
 var y_speed = 0; //Actual jump speed (increase to start jump or ramp)
 var bunny_jump_flag = 0; //Prevents the car from jumping more than once if spacebar is held
 
@@ -150,13 +151,13 @@ window.onload = function init() {
     // Imported from Cube File
     // Pass Draw Functions into helper function
 
-
+    shapeMapper(drawCar);
     shapeMapper(drawCube);
     shapeMapper(drawSphere);
     shapeMapper(drawGround);
     // shapeMapper(drawCone);
     shapeMapper(drawRamp);
-
+    shapeMapper(drawCar);
 
 
     // Pass a function 'funk' which draws a shape
@@ -345,7 +346,7 @@ window.onload = function init() {
         if(movementMatrix[1] >= 0.0 && y_speed < 0) {
             y_speed = 0;
             movementMatrix[1] = 0;
-            clearInterval(car_gravity);
+            clearInterval(gravity_callback);
         }
     }
     
@@ -382,7 +383,7 @@ window.onload = function init() {
             bunny_jump_flag = 1;
             car_gravity();
             
-            setInterval(function () { //Repeatedly calling gravity
+            gravity_callback = setInterval(function () { //Repeatedly calling gravity
                 car_gravity();
             }, 1);
         }
@@ -464,6 +465,8 @@ window.onload = function init() {
             // Object Rotation
             hzAxis += direction * rotationSpeed *  Math.sin(theta);
             hxAxis += direction * rotationSpeed *  Math.cos(theta);
+            
+            
         }
 
     }

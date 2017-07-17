@@ -4,9 +4,7 @@ var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-
-
-    var texture_constants = [document.getElementById("sonicTexture"), document.getElementById("sonicTexture"), document.getElementById("groundTexture")];
+    var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("carTexture")];
 
     // CAMERA AND MODEL VIEW
     eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
@@ -42,15 +40,6 @@ var render = function () {
      *                  This flag determine which axis will be rotated.
      */
 
-    // Hero Object
-    mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
-    mvMatrix = mult(mvMatrix, translate(hero[3]));
-    mvMatrix = mult(mvMatrix, rotateX(hxAxis));
-    mvMatrix = mult(mvMatrix, rotateY(hyAxis));
-    mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
-
-    renderObject(shapeArray[ hero[0] ], hero[1], mvMatrix, pMatrix, 0);
-
     // // Random Object
     var size = historyArray.length;
     for (var i = 0; i < size; i++) {
@@ -70,7 +59,7 @@ var render = function () {
             flagValue = 1.0;
         }
         var texFlag = 0.0;
-        if (shape == 0 || shape == 2){
+        if (shape == 0 || shape == 1 || shape == 3){
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
@@ -132,7 +121,7 @@ var render = function () {
         var axis = arr[4];
 
         var texFlag = 0.0;
-        if (shape == 0 || shape == 2  ){
+        if (shape == 0 || shape == 1 || shape == 3){
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
@@ -230,6 +219,16 @@ var render = function () {
 
         renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
     }
+    
+    
+    // Hero Object (Render last)
+    mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
+    mvMatrix = mult(mvMatrix, translate(hero[3]));
+    mvMatrix = mult(mvMatrix, rotateX(hxAxis));
+    mvMatrix = mult(mvMatrix, rotateY(hyAxis));
+    mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
+
+    renderObject2(0, hero[1], mvMatrix, pMatrix, 0);
 
 
     /**
@@ -251,6 +250,27 @@ function renderObject(indexArray, flagValue, mvMatrix, pMatrix, texValue) {
     gl.uniformMatrix4fv(modelView, false, flatten(mvMatrix));
     gl.uniformMatrix4fv(projection, false, flatten(pMatrix));
     gl.drawArrays(gl.TRIANGLES, indexArray[0], indexArray[1]);
+}
+
+// Currently car-only; will break off and add other models later
+function renderObject2(indexArray, flagValue, mvMatrix, pMatrix, texValue) {
+    gl.uniform1f(gl.getUniformLocation(program, "shaderFlag"), flagValue);
+    gl.uniform1f(gl.getUniformLocation(program, "textureFlag"), texValue);
+    
+    gl.uniformMatrix4fv(modelView, false, flatten(mvMatrix));
+    gl.uniformMatrix4fv(projection, false, flatten(pMatrix));
+    
+    
+    var objStr = document.getElementById('car.obj').innerHTML;
+    carMesh = new OBJ.Mesh(objStr);
+    OBJ.initMeshBuffers(gl, carMesh);
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, carMesh.vertexBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, carMesh.normalBuffer);
+    gl.bindBuffer(gl.ARRAY_BUFFER, carMesh.textureBuffer);
+    
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, carMesh.indexBuffer);
+    gl.drawElements(gl.TRIANGLES, carMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
 function configureTexture( image ) {
