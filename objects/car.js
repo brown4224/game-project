@@ -16,29 +16,36 @@ function drawCar() {
         // Give the car a shape ID
     var objStr = document.getElementById('car.obj').innerHTML;
     carMesh = new OBJ.Mesh(objStr);
-    var colorCount =0;
-    var start = pointsArray.length;
+    OBJ.initMeshBuffers(gl, carMesh);
+    
 
-    for(var i = 0; i < carMesh.vertices.length /3 ; i =i + 3){
+    var colorCount = 0;
+    var start = pointsArray.length - 1;
+    
+carMesh.vertexText
+    
+    for(var i = 0; i < carMesh.vertices.length; i += 3){
 
         // Create verticies
-        var indices_0 = carMesh.indices[i];
-        var indices_1 =  carMesh.indices[i + 1];
-        var indices_2 =  carMesh.indices[i + 2];
+        var indices_0 = i;
+        var indices_1 =  i + 1;
+        var indices_2 =  i + 2;
 
         pointsArray.push( vec4(  carMesh.vertices[indices_0], carMesh.vertices[indices_1], carMesh.vertices[indices_2], 1.0  )  );
         normalsArray.push( vec4(  carMesh.vertexNormals[indices_0], carMesh.vertexNormals[indices_1], carMesh.vertexNormals[indices_2], 1.0  )  );
-
+        texCoordsArray.push( vec2(  carMesh.textures[indices_0], carMesh.textures[indices_1]  )  );
+        
         //  Temp.  just so something shows up
-        colorsArray.push(vertexColors[colorCount]);;
-        colorCount  =   ++colorCount % 3;
+        colorsArray.push(vertexColors[4]);;
+        colorCount  =   ++colorCount % 6;
 
     }
-    var offset = pointsArray.length - start;
-    shapeArray.push([start, offset]);
+    //var offset = pointsArray.length - start;
+    //shapeArray.push([start, offset]);
 
-    console.log(carMesh.indices);
+    console.log("Cars");
 
-    console.log("Shape Array");
-    console.log(shapeArray);
+    //console.log("Shape Array");
+    console.log(pointsArray.length);
+    
 }
