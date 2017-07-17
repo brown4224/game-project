@@ -64,8 +64,10 @@ var near = 0.001;
 var far = 30.0;
 var radius = 10.0;
 var theta = 0;  // Radians
-var car_theta = 0; // Car's current movement
+var camera_theta = theta;
+// var car_theta = 0; // Car's current movement
 var phi = 0.0;
+var camera_phi = phi;
 var dr = Math.PI / 180.0;
 
 // Aspect Ratio
@@ -91,7 +93,7 @@ var nightTimer = 10000;  //  Timer Callback,  10 Seconds
 
 // Lighting
 var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
-var carLightPosition = vec4(-radius * Math.sin(car_theta), 0.0, -radius * Math.cos(car_theta), 0.0);  // Points away from car
+var carLightPosition = vec4(-radius * Math.sin(theta), 0.0, -radius * Math.cos(theta), 0.0);  // Points away from car
 var ambientColor, diffuseColor, specularColor;
 
 
@@ -421,12 +423,13 @@ window.onload = function init() {
             speed += acceleration;
         }
         // Calculate futer location on user input
-        var futureX =   speed * Math.sin(car_theta);
+        var futureX =   speed * Math.sin(theta);
         var futureY =   0;
-        var futureZ =   speed *  Math.cos(car_theta);
+        var futureZ =   speed *  Math.cos(theta);
 
         var rotationSpeed = 50 * speed;
 
+        // Car Movement & Camera
         if ( key == 38) {  // up arrow
             upArrow();
         }
@@ -439,6 +442,23 @@ window.onload = function init() {
         }
         if ( key == 37) {  // left arrow
             leftArrow(turnSpeed);
+        }
+
+        //  Camera Movement
+        if (key == 65){  // "a"  Pan Left
+            panLeft(turnSpeed);
+        }
+        if (key == 68){  // "d"  Pan Right
+            panRight(turnSpeed);
+        }
+        if (key == 83){  // "s"  Pan down
+            panDown(turnSpeed);
+        }
+        if (key == 87){  // "w"  Pan up
+            panUp(turnSpeed);
+        }
+        if (key == 67){  // "c"  Center camera behind car
+            restCamera();
         }
 
 
@@ -454,14 +474,14 @@ window.onload = function init() {
                 move(1);
             }
             
-            if(car_theta != theta){
-            if (car_theta > theta){
-                car_theta -= 0.1;
-            }
-            else{
-                car_theta += 0.1;
-            }
-            }
+            // if(car_theta != theta){
+            // if (car_theta > theta){
+            //     car_theta -= 0.1;
+            // }
+            // else{
+            //     car_theta += 0.1;
+            // }
+            // }
         }
 
         function downArrow(speedAdjust) {
@@ -472,23 +492,37 @@ window.onload = function init() {
                 move(-1);
             }
             
-            if(car_theta != theta){
-            if (car_theta > theta){
-                car_theta -= 0.1;
-            }
-            else{
-                car_theta += 0.1;
-            }
-            }
+            // if(car_theta != theta){
+            // if (car_theta > theta){
+            //     car_theta -= 0.1;
+            // }
+            // else{
+            //     car_theta += 0.1;
+            // }
+            // }
         }
         function leftArrow(degreeTurn) {
+            if (camera_theta == theta)
+                camera_theta  += (dr * degreeTurn);
+
             theta += (dr * degreeTurn);
+
             // hyAxis = theta *  Math.PI;
+            // hyAxis = -theta * 180 / Math.PI;
+
 
         }
         function rightArrow(degreeTurn) {
+            if (camera_theta == theta)
+                camera_theta  -= (dr * degreeTurn);
+
             theta -= (dr * degreeTurn);
+
+
             // hyAxis = theta *  Math.PI;
+            // hyAxis = -theta * 180 / Math.PI;
+            // move(-1);
+
 
         }
 
@@ -510,6 +544,23 @@ window.onload = function init() {
             
             // Object Rotation
             //hzAxis += direction * rotationSpeed *  Math.sin(theta);
+        }
+
+        function panLeft(degreeTurn) {  // "a"
+            camera_theta  -= (dr * degreeTurn);
+        }
+        function panRight(degreeTurn) {  //  "d"
+            camera_theta  += (dr * degreeTurn);
+        }
+        function panDown(degreeTurn) { // "s"
+            camera_phi  -= (dr * degreeTurn);
+        }
+        function panUp(degreeTurn) {   //  "w"
+            camera_phi  += (dr * degreeTurn);
+        }
+        function restCamera() {
+            camera_theta = theta;
+            camera_phi = phi;
         }
 
     }

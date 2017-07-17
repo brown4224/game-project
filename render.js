@@ -7,7 +7,8 @@ var render = function () {
     var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("carTexture")];
 
     // CAMERA AND MODEL VIEW
-    eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
+    eye = vec3(radius * Math.sin(camera_theta) * Math.cos(camera_phi), radius * Math.sin(camera_theta) * Math.sin(camera_phi), radius * Math.cos(camera_theta));
+    // eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
     look = lookAt(eye, at, up);
     pMatrix = perspective(fovy, aspect, near, far);
 
@@ -223,7 +224,9 @@ var render = function () {
     hyAxis = -theta * 180 / Math.PI;
 
     // Hero Object (Render last)
-    mvMatrix = mult(look, scalem(hero[2][0], hero[2][1], hero[2][2]));
+    mvMatrix = mult(look, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
+
+    mvMatrix = mult(mvMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
     mvMatrix = mult(mvMatrix, translate(hero[3]));
     mvMatrix = mult(mvMatrix, rotateX(hxAxis));
     mvMatrix = mult(mvMatrix, rotateY(hyAxis));

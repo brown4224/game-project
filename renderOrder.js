@@ -30,9 +30,18 @@ function renderOrder() {
 
     ///////////////  HERO OBJECT   //////////////////////
     shape = 0;  //Car
+    var centerCar = subtract(carMax, carMin);
+    // centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], (centerCar[1] / 2 ) - carMax[1], (centerCar[2] / 2 ) - carMax[2]);
+    centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], 0, (centerCar[2] / 2 ) - carMax[2]);
+
+    console.log("Center Car");
+    console.log(centerCar);
+    console.log("New Center");
+    console.log(add(centerCar, carMin));
+    console.log(add(centerCar, carMax));
 
     var heroPosition = vec3(0,-0.15,0);
-    hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition  ];
+    hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition, centerCar  ];
 
 
     ///////////////  Ramps   //////////////////////
