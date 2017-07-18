@@ -19,7 +19,6 @@ var render = function () {
     zAxis += rotationSpeed;  // z axis
 
 
-
     ///////////////  Render Objects   //////////////////////
     /**
      *
@@ -220,6 +219,12 @@ var render = function () {
          collisionLocation_ramps[id].orginDistance = dist;
 
         if(dist < isNear && !collisionLocation_ramps[id].isNear) {
+            // Ramp Enter Coord
+            var ramp_pt1 = aabb_boxPosition_min(aabb_matrix, collisionLocation_ramps[id].rampEnterCorner );
+            collisionLocation_ramps[id].rampEnterpt1 = ramp_pt1;
+            var ramp_pt2 = aabb_boxPosition_max(aabb_matrix, collisionLocation_ramps[id].rampEnterCorner );
+            collisionLocation_ramps[id].rampEnterpt2 = ramp_pt2;
+
             nearArray.push(new nearArrayObject(id, "ramp",collisionLocation_ramps ));
             collisionLocation_ramps[id].isNear = true;
         }

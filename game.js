@@ -9,7 +9,7 @@ var debug = false;
 var random = 0;
 
 //AABB
-var isNear = 6;  // Min distance before we want to compare objects
+var isNear = 4;  // Min distance before we want to compare objects
 var nearArray =[];
 var heroPosition;
 var keydown_move = false;
@@ -295,17 +295,16 @@ window.onload = function init() {
 
     //var nightCallback;
     var switch_nights = 0; //Switch to light
-    
+
     setInterval(function () {
         //isNight = !isNight;
         //nightCallback = night();
         night();
     }, 50);
-    
+
 
 
     function night() {
-        //return setInterval(function () {
             var dxNight = 1;
             var dxLight = 0.05;
             if(isNight && lightAmbient[0] > 0.1 ){
@@ -313,19 +312,14 @@ window.onload = function init() {
                 nightTransition(dxLight, dxNight);
             } else if (!isNight && lightAmbient[0] < 1.0){
                 nightTransition(dxLight, dxNight);
-            } 
-            //else {
-                //clearInterval(nightCallback);  // Delete Callback when done!!!!
-            //}
-        //}, 50);
-        
+            }
             switch_nights++;
             if(switch_nights >= nightTimer){
                 isNight = !isNight;
                 switch_nights = 0;
             }
     }
-    
+
     
 
     function nightTransition(dxLight, dxNight) {

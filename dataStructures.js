@@ -11,6 +11,8 @@ function initDataStructures() {
     for(i = 0; i < ramps.length; i++){
         var shape = ramps[0];
         collisionLocation_ramps.push(new boundingBox(i, getCorners(shape)))
+        // console.log("Getting Ramp: " + shape);
+        // console.log(getCorners(shape));
     }
 
 
@@ -23,12 +25,12 @@ function heroObj(shape) {
     this.min = this.corners[0];
     this.max = this.corners[1];
 
-    console.log("Hero Data Structure");
-    console.log("radius: " + this.radius);
-    console.log("min");
-    console.log(this.min);
-    console.log("max");
-    console.log(this.max);
+    // console.log("Hero Data Structure");
+    // console.log("radius: " + this.radius);
+    // console.log("min");
+    // console.log(this.min);
+    // console.log("max");
+    // console.log(this.max);
 }
 
 function sphereBoundingBox(id, r) {
@@ -44,8 +46,18 @@ function boundingBox(id, corners) {
     this.isNear = false;
     this.min = vec3();
     this.max = vec3();
-    this.corners = corners;  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
+    this.rampEnterpt1 = vec3();
+    this.rampEnterpt2 = vec3();
+    this.corners = [vec4(-1, -0.75, -1, 1.0), vec4(1, 0.75, 1, 1.0)];  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
+    this.rampEnterCorner = [vec4(1, -0.75, 1, 1.0), vec4(1, -0.75, -1, 1.0)];  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
+
+    // this.corners = corners;  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
     this.orginDistance = 99;
+    // this.rampEnterCorner = [new vec4(corners[1][0], corners[0][1], corners[1][2], 1), new vec4(corners[1][0], corners[0][1], corners[0][2], 1)]
+    console.log("Ramp Enter");
+    console.log(this.rampEnterCorner);
+    console.log(this.corners);
+
 }
 
 
