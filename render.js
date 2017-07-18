@@ -242,7 +242,14 @@ var render = function () {
         mvMatrix = mult(mvMatrix, rotateX(hxAxis));
         mvMatrix = mult(mvMatrix, rotateY(hyAxis));
         mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
-        renderObject2(0, hero[1], mvMatrix, pMatrix, 0);
+        
+        
+        image = texture_constants[0];
+        configureTexture( image );
+        
+        
+        
+        renderObject2(0, hero[1], mvMatrix, pMatrix, 1);
     }
         ////////////////////  HERO   AABB    //////////////////////////////
     var aabb_matrix = mat4();
