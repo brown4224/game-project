@@ -53,7 +53,6 @@ var projectileMatrix = [];
 //Sound
 var soundArray = [];
 
-
 // Rotate  Variables
 var xAxis = 0; var yAxis = 0; var zAxis = 0;  // Global
 var hxAxis = 0; var hyAxis = 0; var hzAxis = 0;  // Hero Rotation
@@ -179,8 +178,6 @@ window.onload = function init() {
         shapeArray.push([startIndex, offset]);
     }
 
-
-    // drawCar();
     aabb_INIT();
     renderOrder();
     initDataStructures();
@@ -204,7 +201,8 @@ window.onload = function init() {
     
     ///////////////////// LOAD SOUNDS ///////////////////////////////
     soundArray.push(document.getElementById("laserSound"));
-
+    soundArray.push(document.getElementById("crashSound"));
+    soundArray.push(document.getElementById("backgroundSound"));
 
     ///////////////  COLOR BUFFER   //////////////////////
     var cBuffer = gl.createBuffer();
@@ -473,15 +471,7 @@ window.onload = function init() {
             if(!collision){
                 move(1);
             }
-            
-            // if(car_theta != theta){
-            // if (car_theta > theta){
-            //     car_theta -= 0.1;
-            // }
-            // else{
-            //     car_theta += 0.1;
-            // }
-            // }
+           
         }
 
         function downArrow(speedAdjust) {
@@ -491,15 +481,7 @@ window.onload = function init() {
             if(!collision){
                 move(-1);
             }
-            
-            // if(car_theta != theta){
-            // if (car_theta > theta){
-            //     car_theta -= 0.1;
-            // }
-            // else{
-            //     car_theta += 0.1;
-            // }
-            // }
+           
         }
         function leftArrow(degreeTurn) {
             if (camera_theta == theta)
@@ -537,13 +519,6 @@ window.onload = function init() {
              *   hxAxis += direction * rotationSpeed *  Math.cos(theta);
              *
              */
-
-            // hzAxis += direction * rotationSpeed *  Math.sin(theta);
-            // hxAxis += direction * rotationSpeed *  Math.cos(theta);
-
-            
-            // Object Rotation
-            //hzAxis += direction * rotationSpeed *  Math.sin(theta);
         }
 
         function panLeft(degreeTurn) {  // "a"
@@ -601,6 +576,10 @@ window.onload = function init() {
     //     // Do stuff
     // });
 
-
+    //Plays music
+    soundArray[2].volume = 0.2;
+    //soundArray[2].play();
+    
+    
     render();
 };

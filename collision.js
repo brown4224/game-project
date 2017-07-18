@@ -22,6 +22,8 @@ function collisionDetection(fx, fy, fz) {
 
             var results = aabb_sphere_sphere_detection([heroPosition.center, heroPosition.radius], [pos, r]);
             if (results) {
+                
+                document.getElementById("crashSound").play();
                 speed /= 2;
                 return true;
 
@@ -42,8 +44,10 @@ function collisionDetection(fx, fy, fz) {
             // console.log(nearArray);
             var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [posMin, posMax]);
             if (results) {
-                return true;
+                
+                document.getElementById("crashSound").play();
                 console.log("True");
+                return true;
             }
         }
 
