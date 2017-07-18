@@ -92,7 +92,7 @@ const up = vec3(0.0, 1.0, 0.0);
 
 // Night
 var isNight = false;
-var nightTimer = 10000;  //  Timer Callback,  10 Seconds
+var nightTimer = 200;  //  Timer Callback,  10 Seconds
 
 // Lighting
 var lightPosition = vec4(5.0, 0.0, 10.0, 0.0);
@@ -290,14 +290,21 @@ window.onload = function init() {
     ////////////////////////////////////////////////////////////////
     //////////////    Night Callbacks   ///////////////////////////
     ////////////////////////////////////////////////////////////////
-    var nightCallback;
+    
+
+    //var nightCallback;
+    var switch_nights = 0; //Switch to light
+    
     setInterval(function () {
-        isNight = !isNight;
-        nightCallback = night();
-    }, nightTimer);
+        //isNight = !isNight;
+        //nightCallback = night();
+        night();
+    }, 50);
+    
+
 
     function night() {
-        return setInterval(function () {
+        //return setInterval(function () {
             var dxNight = 1;
             var dxLight = 0.05;
             if(isNight && lightAmbient[0] > 0.1 ){
@@ -305,11 +312,20 @@ window.onload = function init() {
                 nightTransition(dxLight, dxNight);
             } else if (!isNight && lightAmbient[0] < 1.0){
                 nightTransition(dxLight, dxNight);
-            } else {
-                clearInterval(nightCallback);  // Delete Callback when done!!!!
+            } 
+            //else {
+                //clearInterval(nightCallback);  // Delete Callback when done!!!!
+            //}
+        //}, 50);
+        
+            switch_nights++;
+            if(switch_nights >= nightTimer){
+                isNight = !isNight;
+                switch_nights = 0;
             }
-        }, 50);
     }
+    
+    
 
     function nightTransition(dxLight, dxNight) {
 
