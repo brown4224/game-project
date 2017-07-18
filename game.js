@@ -61,8 +61,9 @@ var hxAxis = 0; var hyAxis = 0; var hzAxis = 0;  // Hero Rotation
 
 //   Perspective
 var near = 0.001;
-var nearDefault = 0.001;
-var nearDriverSeat = 2.2;
+var showCar = true;
+// var nearDefault = 0.001;
+// var nearDriverSeat = 2.2;
 var far = 30.0;
 var radius = 10.0;
 var camera_radius = radius;
@@ -530,25 +531,31 @@ window.onload = function init() {
 
         function panLeft(degreeTurn) {  // "a"
             camera_theta  -= (dr * degreeTurn);
+            showCar = true;
         }
         function panRight(degreeTurn) {  //  "d"
             camera_theta  += (dr * degreeTurn);
+            showCar = true;
         }
         function panDown(degreeTurn) { // "s"
             camera_phi  -= (dr * degreeTurn);
+            showCar = true;
         }
         function panUp(degreeTurn) {   //  "w"
             camera_phi  += (dr * degreeTurn);
+            showCar = true;
         }
         function restCamera() {
             camera_theta = theta;
             camera_phi = phi;
             camera_radius = radius;
-            near = nearDefault;
+            showCar = true;
+            // near = nearDefault;
         }
         function driversSeat() {
             camera_radius = 1;
-            near = nearDriverSeat;
+            showCar = false;
+            // near = nearDriverSeat;
         }
 
     }

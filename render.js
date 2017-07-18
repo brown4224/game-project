@@ -231,41 +231,34 @@ var render = function () {
     /////////////////////////////////////////////////////////////////////
     /////////////  HERO:  CAR ///////////////////////////////
 
-    // Rotate Car
-    hyAxis = -theta * 180 / Math.PI;
+    if(showCar){   // Are you in driver seat?
+        // Rotate Car
+        hyAxis = -theta * 180 / Math.PI;
 
-    // Hero Object (Render last)
-    mvMatrix = mult(look, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
+        // Hero Object (Render last)
+        mvMatrix = mult(look, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
+        mvMatrix = mult(mvMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
+        mvMatrix = mult(mvMatrix, translate(hero[3]));
+        mvMatrix = mult(mvMatrix, rotateX(hxAxis));
+        mvMatrix = mult(mvMatrix, rotateY(hyAxis));
+        mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
 
-    mvMatrix = mult(mvMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
-    mvMatrix = mult(mvMatrix, translate(hero[3]));
-    mvMatrix = mult(mvMatrix, rotateX(hxAxis));
-    mvMatrix = mult(mvMatrix, rotateY(hyAxis));
-    mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
+        ////////////////////    AABB    //////////////////////////////
+        var aabb_matrix = mat4();
+        aabb_matrix = mult(aabb_matrix, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
+        aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
+        aabb_matrix = mult(aabb_matrix, translate(hero[3]));
+        aabb_matrix = mult(aabb_matrix, rotateX(hxAxis));
+        aabb_matrix = mult(aabb_matrix, rotateY(hyAxis));
+        aabb_matrix = mult(aabb_matrix, rotateZ(hzAxis));
+        var hero_min = aabb_boxPosition_min(aabb_matrix, heroPosition.corners );
+        heroPosition.min = hero_min;
+        var hero_max = aabb_boxPosition_max(aabb_matrix, heroPosition.corners );
+        heroPosition.max = hero_max;
 
-    ////////////////////    AABB    //////////////////////////////
-    var aabb_matrix = mat4();
-    aabb_matrix = mult(aabb_matrix, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
-    aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
-    aabb_matrix = mult(aabb_matrix, translate(hero[3]));
-    aabb_matrix = mult(aabb_matrix, rotateX(hxAxis));
-    aabb_matrix = mult(aabb_matrix, rotateY(hyAxis));
-    aabb_matrix = mult(aabb_matrix, rotateZ(hzAxis));
-    var hero_min = aabb_boxPosition_min(aabb_matrix, heroPosition.corners );
-    heroPosition.min = hero_min;
-    var hero_max = aabb_boxPosition_max(aabb_matrix, heroPosition.corners );
-    heroPosition.max = hero_max;
+        renderObject2(0, hero[1], mvMatrix, pMatrix, 0);
 
-    // console.log("Car Corners");
-    // console.log(heroPosition.corners);
-    //
-    // console.log("Car min and Max");
-    // console.log(hero_min);
-    // console.log(hero_max);
-
-
-    renderObject2(0, hero[1], mvMatrix, pMatrix, 0);
-
+    }
 
     /**
      * Turns on collision detection system.
