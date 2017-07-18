@@ -43,6 +43,7 @@ function collisionDetection(fx, fy, fz) {
             var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [posMin, posMax]);
             if (results) {
                 return true;
+                console.log("True");
             }
         }
 

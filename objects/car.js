@@ -1,5 +1,5 @@
-var carMin = vec3();
-var carMax = vec3();
+var carMin = vec4();
+var carMax = vec4();
 
 
 function drawCar() {
@@ -79,16 +79,16 @@ carMesh.vertexText
     //var offset = pointsArray.length - start;
     //shapeArray.push([start, offset]);
 
-    console.log("Cars");
+    // console.log("Cars");
 
     //console.log("Shape Array");
-    console.log(pointsArray.length);
+    // console.log(pointsArray.length);
 
-    console.log(pointsArray.length);
-    carMin = new vec3(minX, minY, minZ);
-    carMax = new vec3(maxX, maxY, maxZ);
-    console.log("Car Min and Max");
-    console.log(carMin);
-    console.log(carMax);
+    // console.log(pointsArray.length);
+    carMin = new vec4(minX, minY, minZ, 1.0);
+    carMax = new vec4(maxX, maxY, maxZ, 1.0);
+    // console.log("Car Min and Max");
+    // console.log(carMin);
+    // console.log(carMax);
     
 }

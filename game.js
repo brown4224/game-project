@@ -370,7 +370,7 @@ window.onload = function init() {
     
     
 
-    var keyDownCallBackSpeed = 30;
+    var keyDownCallBackSpeed = 1;
 
     function keydown(e) {
         /**

@@ -61,7 +61,7 @@ function getRadius(typeObject) {
 
     // // var radius;
     switch (typeObject) {
-        case 0:  //cube
+        case 0:  //car
             sp_radius = aabb_CarRadius;
             break;
         case 1:  //cube
