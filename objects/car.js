@@ -39,7 +39,8 @@ function drawCar() {
     var colorCount = 0;
     var start = pointsArray.length - 1;
     
-carMesh.vertexText
+    var texIndices = 0; //Since this is vec2 while the others are vec4, it gets out of sync
+    
     
     for(var i = 0; i < carMesh.vertices.length; i += 3){
 
@@ -50,13 +51,12 @@ carMesh.vertexText
 
         pointsArray.push( vec4(  carMesh.vertices[indices_0], carMesh.vertices[indices_1], carMesh.vertices[indices_2], 1.0  )  );
         normalsArray.push( vec4(  carMesh.vertexNormals[indices_0], carMesh.vertexNormals[indices_1], carMesh.vertexNormals[indices_2], 1.0  )  );
-        texCoordsArray.push( vec2(  carMesh.textures[indices_0], carMesh.textures[indices_1]  )  );
+        texCoordsArray.push( vec2(  carMesh.textures[texIndices], carMesh.textures[texIndices + 1]  )  );
+        
+        texIndices += 2;
         
         //  Temp.  just so something shows up
-        colorsArray.push(vertexColors[4]);;
-        colorCount  =   ++colorCount % 6;
-
-
+        colorsArray.push(vec4(1.0, 1.0, 1.0, 1.0));;
 
 
         /// Calculate Min and Max
