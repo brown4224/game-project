@@ -4,7 +4,7 @@ var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 
-    var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("carTexture")];
+    var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("skyboxTexture")];
 
     // CAMERA AND MODEL VIEW
     eye = vec3(camera_radius * Math.sin(camera_theta) * Math.cos(camera_phi), camera_radius * Math.sin(camera_theta) * Math.sin(camera_phi), camera_radius * Math.cos(camera_theta));
@@ -257,6 +257,17 @@ var render = function () {
         heroPosition.max = hero_max;
 
         renderObject2(0, hero[1], mvMatrix, pMatrix, 0);
+        
+        
+        
+        ////////////////////    RENDER SKYBOX    //////////////////////////////
+        image = texture_constants[5];
+        configureTexture( image );
+
+        mvMatrix = mult(look, scalem(25, 25, 25));
+        mvMatrix = mult(mvMatrix, translate(hero[3]));
+    
+        renderObject(shapeArray[5], 1.0, mvMatrix, pMatrix, 1.0);
 
     }
 
