@@ -69,7 +69,6 @@ var radius = 10.0;
 var camera_radius = radius;
 var theta = 0;  // Radians
 var camera_theta = theta;
-// var car_theta = 0; // Car's current movement
 var phi = 0.0;
 var camera_phi = phi;
 var dr = Math.PI / 180.0;
@@ -168,7 +167,8 @@ window.onload = function init() {
     shapeMapper(drawSphere);
     shapeMapper(drawGround);
     shapeMapper(drawRamp);
-
+    shapeMapper(drawSkybox);
+    
     // shapeMapper(drawCone);
     /* DO NOT CHANGE OREDER*/
     /* DO NOT CHANGE OREDER*/
