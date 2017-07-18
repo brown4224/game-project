@@ -248,8 +248,12 @@ var render = function () {
         mvMatrix = mult(mvMatrix, rotateY(hyAxis));
         mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
         
-        
+        if(brake_light == 0) {
         image = texture_constants[0];
+        }
+        else{
+            image = document.getElementById("carBrakeTexture");
+        }
         configureTexture( image );
         
         
