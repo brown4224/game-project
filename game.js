@@ -9,7 +9,7 @@ var debug = false;
 var random = 0;
 
 //AABB
-var isNear = 5;  // Min distance before we want to compare objects
+var isNear = 6;  // Min distance before we want to compare objects
 var nearArray =[];
 var heroPosition;
 var keydown_move = false;
@@ -531,19 +531,22 @@ window.onload = function init() {
 
         function panLeft(degreeTurn) {  // "a"
             camera_theta  -= (dr * degreeTurn);
-            showCar = true;
+            // showCar = true;
         }
         function panRight(degreeTurn) {  //  "d"
             camera_theta  += (dr * degreeTurn);
-            showCar = true;
+            // showCar = true;
         }
         function panDown(degreeTurn) { // "s"
             camera_phi  -= (dr * degreeTurn);
-            showCar = true;
+          camera_theta  -= (dr * degreeTurn);
+            // showCar = true;
         }
         function panUp(degreeTurn) {   //  "w"
             camera_phi  += (dr * degreeTurn);
-            showCar = true;
+            camera_theta  += (dr * degreeTurn);
+
+            // showCar = true;
         }
         function restCamera() {
             camera_theta = theta;
