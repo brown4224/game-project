@@ -45,25 +45,20 @@ function collisionDetection(fx, fy, fz) {
             var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [posMin, posMax]);
             if (results) {
 
+                // Working on Ramp Enterence
                 var rampWidth = subtract(posMax, posMin);
-
                 var pt1 = array[key].rampEnterpt1;
                 var pt2 = array[key].rampEnterpt2;
-                // console.log("Enter Points");
-                // console.log(pt1);
-                // console.log(pt2);
                 // var pt3 = new vec3(pt1[0] + rampWidth[0] / 2, pt1[1], pt1[2]);
                 var pt4 = new vec3(pt2[0] - (posMax[0] - posMin[0]) / 2, pt2[1], pt2[2]);
-
-                // Entering Ramp
                 // var enter = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [new vec3(pt4[0] + fx, pt4[1] + fy,pt4[2] + fz),new vec3(pt1[0] + fx, pt1[1] + fy,pt1[2] + fz)]);
                 var enter = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [pt4, pt1]);
-
-                if(enter) {
-                    movementMatrix[1] = -1;
-                    console.log("Success")
-                    return false;
-                }
+                
+                // if(enter) {
+                //     movementMatrix[1] = -1;
+                //     console.log("Success")
+                //     return false;
+                // }
 
                 // var slope = (posMax[1] - posMin[1])/ (posMax[0] - posMin[0]);
 
