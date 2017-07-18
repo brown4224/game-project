@@ -43,6 +43,7 @@ var gravity = 0.01; //Constant that is subtracting from Y movementMatrix
 var gravity_callback;
 var y_speed = 0; //Actual jump speed (increase to start jump or ramp)
 var bunny_jump_flag = 0; //Prevents the car from jumping more than once if spacebar is held
+var brake_light = 0; //Used for car texture change
 
 
 // Projectiles
@@ -364,6 +365,10 @@ window.onload = function init() {
             bunny_jump_flag = 0;
         }
         
+        if (key == 40) {
+            brake_light = 0; //Turn brake light off
+        }
+        
         if(timer){
             clearInterval(timer);
             delete keymap[key];
@@ -501,7 +506,8 @@ window.onload = function init() {
         function downArrow(speedAdjust) {
             keydown_move = true;
             var collision = collisionDetection(-futureX, -futureY, -futureZ);
-
+            brake_light = 1;
+            
             if(!collision){
                 move(-1);
             }
@@ -607,7 +613,7 @@ window.onload = function init() {
 
     //Plays music
     soundArray[2].volume = 0.2;
-    //soundArray[2].play();
+    soundArray[2].play();
     
     
     render();
