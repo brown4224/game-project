@@ -14,35 +14,37 @@ function quad(a, b, c, d) {
     var t2 = subtract(vertices[c], vertices[b]);
     var normal = cross(t1, t2);
     var normal = vec3(normal);
+    
+    var clearColor = vec4(1.0, 1.0, 1.0, 1.0);
 
     //  Push onto array
     pointsArray.push(vertices[a]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[0]);
 
     pointsArray.push(vertices[b]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[1]); 
     
     pointsArray.push(vertices[c]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[2]);
 
     pointsArray.push(vertices[a]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[0]);
 
     pointsArray.push(vertices[c]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[2]);
 
     pointsArray.push(vertices[d]);
-    colorsArray.push(vertexColors[a]);
+    colorsArray.push(clearColor);
     normalsArray.push(normal);
     texCoordsArray.push(texCoord[3]);
 
