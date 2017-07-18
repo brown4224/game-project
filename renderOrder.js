@@ -18,7 +18,7 @@
  *                  This flag determine which axis will be rotated.
  */
 
-var maxObjects = 2;
+var maxObjects = 12;
 
 function renderOrder() {
     var shape;
@@ -35,17 +35,17 @@ function renderOrder() {
     centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], 0, (centerCar[2] / 2 ) - carMax[2]);
 
     var heroPosition = vec3(0,-0.14,0);
-    hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition, centerCar  ];
+    hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition, centerCar, true  ];
 
 
     ///////////////  Ramps   //////////////////////
     shape = 4;
     trans = [vec3(5,0,5), defaultTranslation];
-    ramps.push([  shape, true, defaultScale, trans, [false, false, false]  ]);
+    ramps.push([  shape, true, defaultScale, trans, [false, false, false], true  ]);
 
     
     ///////////////  DRAW GROUND   //////////////////////
-    historyArray.push([  3, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false] ]);
+    historyArray.push([  3, true, [1, 1, 1], [vec3(0.0, 5.0, 0.0), defaultTranslation], [false, false, false], true ]);
     console.log("Ground");
     console.log(historyArray[historyArray.length - 1]);
 
@@ -64,7 +64,7 @@ function renderOrder() {
         trans = [translation, defaultTranslation];
         }
 
-        historyArray.push([  shape, true, defaultScale, trans, defaultRotation  ]);
+        historyArray.push([  shape, true, defaultScale, trans, defaultRotation, true  ]);
         console.log(historyArray[historyArray.length - 1]);
         
     }

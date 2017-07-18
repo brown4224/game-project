@@ -47,8 +47,9 @@ var bunny_jump_flag = 0; //Prevents the car from jumping more than once if space
 
 // Projectiles
 var projectileArray = [];
-var projectileSpeed = 10 * defaultSpeed;
+var projectileSpeed = 50 * defaultSpeed;
 var projectileMatrix = [];
+var bulletArray = [];
 
 //Sound
 var soundArray = [];
@@ -60,8 +61,11 @@ var hxAxis = 0; var hyAxis = 0; var hzAxis = 0;  // Hero Rotation
 
 //   Perspective
 var near = 0.001;
+var nearDefault = 0.001;
+var nearDriverSeat = 2.2;
 var far = 30.0;
 var radius = 10.0;
+var camera_radius = radius;
 var theta = 0;  // Radians
 var camera_theta = theta;
 // var car_theta = 0; // Car's current movement
@@ -389,9 +393,6 @@ window.onload = function init() {
         e.preventDefault();
         var key = e.which;
 
-        if ( key == 70){  // 'f' Key
-            fire();
-        }
         
         if (key == 32 && y_speed == 0.0 && bunny_jump_flag == 0) { //Spacebar - set initial 'jump' speed
             y_speed = 0.15;
@@ -457,6 +458,12 @@ window.onload = function init() {
         }
         if (key == 67){  // "c"  Center camera behind car
             restCamera();
+        }
+        if (key == 88){  // "x"  drivers Seat
+            driversSeat()
+        }
+        if ( key == 70){  // 'f' Key
+            fire();
         }
 
 
@@ -536,29 +543,25 @@ window.onload = function init() {
         function restCamera() {
             camera_theta = theta;
             camera_phi = phi;
+            camera_radius = radius;
+            near = nearDefault;
+        }
+        function driversSeat() {
+            camera_radius = 1;
+            near = nearDriverSeat;
         }
 
     }
 
 
     function fire() {
-        
+
         soundArray[0].play();
-        
+
         projectileArray.push( new bullet(2, projectileArray.length ));
         var b = projectileArray[projectileArray.length -1];
-        b.callback = setInterval(function () {
-            if(b.count > 0){
-                b.projectileMovement = vec3(b.projectileMovement[0] + b.direction[0], b.projectileMovement[1] + b.direction[1], b.projectileMovement[2] + b.direction[2]);
-                b.count--;
+        bulletArray.push(b.id);
 
-            } else {
-                clearInterval(b.callback);
-                console.log("Remove from array");
-                b.render = false;
-                projectileArray.slice(b.id, 1);
-            }
-        }, 5);
     }
 
     ///////////////  Mouse   //////////////////////

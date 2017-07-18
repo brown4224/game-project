@@ -7,7 +7,7 @@ var render = function () {
     var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("carTexture")];
 
     // CAMERA AND MODEL VIEW
-    eye = vec3(radius * Math.sin(camera_theta) * Math.cos(camera_phi), radius * Math.sin(camera_theta) * Math.sin(camera_phi), radius * Math.cos(camera_theta));
+    eye = vec3(camera_radius * Math.sin(camera_theta) * Math.cos(camera_phi), camera_radius * Math.sin(camera_theta) * Math.sin(camera_phi), camera_radius * Math.cos(camera_theta));
     // eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
     look = lookAt(eye, at, up);
     pMatrix = perspective(fovy, aspect, near, far);
@@ -41,6 +41,54 @@ var render = function () {
      *                  This flag determine which axis will be rotated.
      */
 
+
+    /////////////////////////////////////////////////////////////////////
+    /////////////  Projectile  ///////////////////////////////
+
+    for (var i = 0; i < bulletArray.length; i++) {
+        var key = bulletArray[i];
+        var bullet = projectileArray[key];
+        if (bullet.count <= 0){
+            bulletArray.splice(i, 1);
+            i--;
+            continue;
+
+        }
+        bullet.count--;
+        projectileArray[key].projectileMovement = add( projectileArray[key].projectileMovement,  projectileArray[key].direction);
+
+        var shape = bullet.shape;
+        var flagValue = true;
+        var scaler = bullet.scaler;
+        var trans = [bullet.projectileMovement, vec3(0,0,0)];
+        var axis = [false,false,false];
+
+        var texFlag = 0.0;
+        if (shape == 0  || shape == 1 || shape == 3 ){
+
+            if(image != texture_constants[shape]){
+                image = texture_constants[shape];
+                configureTexture( image );
+            }
+
+            texFlag = 1.0;
+        }
+
+        /////////////////////////////////////////////////////////////////////
+        /////////////  MATRIX MULTIPLICATION ///////////////////////////////
+        // Look: Resets the position for each object
+        mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
+        mvMatrix = matrixMult(mvMatrix, scaler, trans, axis);
+
+        ////////////////////    AABB    //////////////////////////////
+        var aabb_matrix = mat4();
+        aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
+        var position = aabb_spherePosition(aabb_matrix );
+        projectileArray[key].position = position;
+
+        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
+    }
+
     // // Random Object
     var size = historyArray.length;
     for (var i = 0; i < size; i++) {
@@ -51,6 +99,12 @@ var render = function () {
         var scaler = arr[2];
         var trans = arr[3];
         var axis = arr[4];
+        var alive = arr[5]; // Flag for gun
+
+        if(!alive)
+            continue;
+
+
 
         // False: Use Vertex Shader
         // True: Use Light Shader
@@ -101,6 +155,22 @@ var render = function () {
                     trans[1] = vec3(0,0,0);
                     arr[3] = trans;
                 }
+            }
+            // Do you hit a bullet
+            for(var j = 0; j< bulletArray.length; j++){
+                var key = bulletArray[j];
+                var p = projectileArray[key].position;
+                var r = projectileArray[key].radius;
+                var kill = aabb_sphere_sphere_detection([p, r], [collisionLocation_sphere[id].position, collisionLocation_sphere[id].radius]);
+                if(kill){
+
+                    historyArray[i][5] = false;
+                    collisionLocation_sphere[i].isNear = false;
+                    collisionLocation_sphere[i].orginDistance = 999;
+                    bulletArray.splice(j, 1);
+                    continue;
+                }
+
             }
         }
 
@@ -153,69 +223,6 @@ var render = function () {
             nearArray.push(new nearArrayObject(id, "ramp",collisionLocation_ramps ));
             collisionLocation_ramps[id].isNear = true;
         }
-
-        renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
-    }
-
-    /////////////////////////////////////////////////////////////////////
-    /////////////  Projectile  ///////////////////////////////
-
-
-    for (var i = 0; i < projectileArray.length; i++) {
-        var bullet = projectileArray[i];
-        if (!bullet.render)
-            continue;
-
-        // Position adjust from movement matrix
-        var newPos = vec3(bullet.projectileMovement[0] - movementMatrix[0], bullet.projectileMovement[1] - movementMatrix, bullet.projectileMovement[2] - movementMatrix);
-
-        var shape = bullet.shape;
-        var flagValue = true;
-        var scaler = bullet.scaler;
-        var trans = [bullet.projectileMovement, vec3(0,0,0)];
-        var axis = [false,false,false];
-
-        var texFlag = 0.0;
-        if (shape == 0  || shape == 1 || shape == 3 ){
-
-            if(image != texture_constants[shape]){
-                image = texture_constants[shape];
-                configureTexture( image );
-            }
-
-            texFlag = 1.0;
-        }
-
-        /////////////////////////////////////////////////////////////////////
-        /////////////  MATRIX MULTIPLICATION ///////////////////////////////
-        // Look: Resets the position for each object
-        mvMatrix = mult(look, scalem(scaler[0], scaler[1], scaler[2]));
-        mvMatrix = matrixMult(mvMatrix, scaler, trans, axis);
-
-        ////////////////////    AABB    //////////////////////////////
-        var aabb_matrix = mat4();
-        aabb_matrix = matrixMult(aabb_matrix, scaler, trans, axis);
-        var position = aabb_spherePosition(aabb_matrix );
-        projectileArray[i].position = position;
-
-
-        // If object is close
-        // for(var j=1; j < historyArray.length; j++){
-        //     // Need to ray trace or use zones
-        //     // Write something more efficent later
-        //     var target = collisionLocation_sphere[j];
-        //     var results = aabb_sphere_sphere_detection([bullet.position, bullet.radius], [j.position, j.radius]);
-        //     if(radius){
-        //         // Kill object
-        //         collisionLocation_sphere.splice(j, 1);
-        //         historyArray.slice(j, 1);
-        //         // Kill bullet
-        //         clearInterval(bullet.callback);
-        //         projectileArray.slice(i, 1);
-        //         i--;
-        //         continue;
-        //     }
-        // }
 
         renderObject(shapeArray[shape], flagValue, mvMatrix, pMatrix, texFlag);
     }
