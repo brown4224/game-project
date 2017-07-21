@@ -1,11 +1,19 @@
 var image;
+var texture_data = [];
+	
+
 
 var render = function () {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-
     var texture_constants = [document.getElementById("carTexture"), document.getElementById("sonicTexture"), "", document.getElementById("groundTexture"), "", document.getElementById("skyboxTexture")];
-
+	if(texture_data.length < texture_constants.length){
+		for (var i = 0; i < texture_constants.length; i++){
+			texture_data.push(gl.createTexture());		
+		}	
+	}
+	
+	
     // CAMERA AND MODEL VIEW
     eye = vec3(camera_radius * Math.sin(camera_theta) * Math.cos(camera_phi), camera_radius * Math.sin(camera_theta) * Math.sin(camera_phi), camera_radius * Math.cos(camera_theta));
     // eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
@@ -67,7 +75,7 @@ var render = function () {
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
-                configureTexture( image );
+                configureTexture( image, shape );
             }
 
             texFlag = 1.0;
@@ -117,7 +125,7 @@ var render = function () {
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
-                configureTexture( image );
+                configureTexture( image, shape );
             }
 
             texFlag = 1.0;
@@ -195,7 +203,7 @@ var render = function () {
 
             if(image != texture_constants[shape]){
                 image = texture_constants[shape];
-                configureTexture( image );
+                configureTexture( image, shape );
             }
 
             texFlag = 1.0;
@@ -254,7 +262,7 @@ var render = function () {
         else{
             image = document.getElementById("carBrakeTexture");
         }
-        configureTexture( image );
+        configureTexture( image, 0 );
         
         
         
@@ -275,7 +283,7 @@ var render = function () {
     
         ////////////////////    RENDER SKYBOX    //////////////////////////////
         image = texture_constants[5];
-        configureTexture( image );
+        configureTexture( image, 5 );
 
         mvMatrix = mult(look, scalem(25, 25, 25));
         mvMatrix = mult(mvMatrix, translate(hero[3]));
@@ -325,12 +333,11 @@ function renderObject2(indexArray, flagValue, mvMatrix, pMatrix, texValue) {
     gl.drawElements(gl.TRIANGLES, carMesh.indexBuffer.numItems, gl.UNSIGNED_SHORT, 0);
 }
 
-function configureTexture( image ) {
-        texture = gl.createTexture();
+function configureTexture( image, t_index ) {
+        texture = texture_data[t_index];
         gl.bindTexture( gl.TEXTURE_2D, texture );
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-        gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGB,
-            gl.RGB, gl.UNSIGNED_BYTE, image );
+        gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image );
         gl.generateMipmap( gl.TEXTURE_2D );
         gl.texParameteri( gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
             gl.NEAREST_MIPMAP_LINEAR );

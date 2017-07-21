@@ -209,6 +209,8 @@ window.onload = function init() {
     soundArray.push(document.getElementById("laserSound"));
     soundArray.push(document.getElementById("crashSound"));
     soundArray.push(document.getElementById("backgroundSound"));
+	soundArray.push(document.getElementById("reverseSound"));
+	soundArray.push(document.getElementById("landSound"));
 
     ///////////////  COLOR BUFFER   //////////////////////
     var cBuffer = gl.createBuffer();
@@ -361,6 +363,7 @@ window.onload = function init() {
         
         if (key == 40) {
             brake_light = 0; //Turn brake light off
+			soundArray[3].pause();
         }
         
         if(timer){
@@ -382,6 +385,7 @@ window.onload = function init() {
             movementMatrix[1] = 0;
             hxAxis = 0;
             clearInterval(gravity_callback);
+			soundArray[4].play();
         }
     }
     
@@ -419,6 +423,9 @@ window.onload = function init() {
                 car_gravity();
             }, 1);
         }
+		else if (key == 40 && soundArray[3].paused){
+			soundArray[3].play();
+		}
         else{
         
             if(!keymap[key]){
