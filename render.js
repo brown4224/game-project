@@ -249,13 +249,14 @@ var render = function () {
 
     if(showCar){   // Are you in driver seat?
         // Hero Object (Render last)
-        mvMatrix = mult(look, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
-        mvMatrix = mult(mvMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
-        mvMatrix = mult(mvMatrix, translate(hero[3]));
-        mvMatrix = mult(mvMatrix, rotateX(hxAxis));
+        mvMatrix = mult(look, rotateX(hxAxis));
         mvMatrix = mult(mvMatrix, rotateY(hyAxis));
         mvMatrix = mult(mvMatrix, rotateZ(hzAxis));
-        
+        mvMatrix = mult(mvMatrix, translate(hero[3]));
+        mvMatrix = mult(mvMatrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
+        mvMatrix = mult(mvMatrix, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
+
+
         if(brake_light == 0) {
         image = texture_constants[0];
         }
@@ -270,17 +271,18 @@ var render = function () {
     }
         ////////////////////  HERO   AABB    //////////////////////////////
     var aabb_matrix = mat4();
-    aabb_matrix = mult(aabb_matrix, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
-    aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
-    aabb_matrix = mult(aabb_matrix, translate(hero[3]));
     aabb_matrix = mult(aabb_matrix, rotateX(hxAxis));
     aabb_matrix = mult(aabb_matrix, rotateY(hyAxis));
     aabb_matrix = mult(aabb_matrix, rotateZ(hzAxis));
+    aabb_matrix = mult(aabb_matrix, translate(hero[3]));
+    aabb_matrix = mult(aabb_matrix, scalem(hero[2][0], hero[2][1], hero[2][2]));
+    aabb_matrix = mult(aabb_matrix, translate(hero[4]));  // Center Car before Rotate.  Funny things can happen if not centered
     var hero_min = aabb_boxPosition_min(aabb_matrix, heroPosition.corners );
     heroPosition.min = hero_min;
     var hero_max = aabb_boxPosition_max(aabb_matrix, heroPosition.corners );
     heroPosition.max = hero_max;
-    
+
+
         ////////////////////    RENDER SKYBOX    //////////////////////////////
         image = texture_constants[5];
         configureTexture( image, 5 );
@@ -359,7 +361,6 @@ function matrixMult(matrix, scaler, trans, axis) {
      *     Returns Matrix
      *
      */
-    matrix = mult(matrix, scalem(scaler[0], scaler[1], scaler[2]));
     matrix = mult(matrix, translate(movementMatrix));
     matrix = mult(matrix, translate(trans[0]));
     
@@ -371,7 +372,9 @@ function matrixMult(matrix, scaler, trans, axis) {
         matrix = mult(matrix, rotateZ(zAxis));
     
 
-    return mult(matrix, translate(trans[1]));
+    matrix = mult(matrix, translate(trans[1]));
+    return mult(matrix, scalem(scaler[0], scaler[1], scaler[2]));
+
 }
 
 

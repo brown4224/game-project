@@ -25,14 +25,14 @@ function renderOrder() {
     var defaultScale = vec3(1.0, 1.0, 1.0);
     var defaultTranslation = vec3(0.0, 0.0, 0.0);
     var defaultRotation = [false, true, false];
-    var bounds = 10;
+    var bounds = 15;
 
 
     ///////////////  HERO OBJECT   //////////////////////
     shape = 0;  //Car
     var centerCar = subtract(carMax, carMin);
-    // centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], (centerCar[1] / 2 ) - carMax[1], (centerCar[2] / 2 ) - carMax[2]);
-    centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], 0, (centerCar[2] / 2 ) - carMax[2]);
+    centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], (centerCar[1] / 2 ) - carMax[1], (centerCar[2] / 2 ) - carMax[2]);
+    // centerCar =  vec3((centerCar[0] / 2 ) - carMax[0], 0, (centerCar[2] / 2 ) - carMax[2]);
 
     var heroPosition = vec3(0,-0.14,0);
     hero =[  shape, true, vec3(4.0, 4.0, 4.0), heroPosition, centerCar, true  ];

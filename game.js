@@ -33,10 +33,10 @@ var ramps = [];
 
 // Movement  and keymapping
 var movementMatrix = vec3(0.0, 0.0, 0.0);  // When user moves
-var maxSpeed = 0.4;
+var maxSpeed = 0.3;
 var defaultSpeed = 0.1;
 var speed = defaultSpeed;
-var acceleration = 0.005;  // Use small values
+var acceleration = 0.05;  // Use small values
 var turnSpeed = 5;   // Measured in Degrees
 var keymap = [];  // Stores callback functions.  Not numbers
 var gravity = 0.01; //Constant that is subtracting from Y movementMatrix
@@ -48,7 +48,7 @@ var brake_light = 0; //Used for car texture change
 
 // Projectiles
 var projectileArray = [];
-var projectileSpeed = 50 * defaultSpeed;
+var projectileSpeed = 10 * defaultSpeed;
 var projectileMatrix = [];
 var bulletArray = [];
 

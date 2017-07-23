@@ -32,17 +32,31 @@ function collisionDetection(fx, fy, fz) {
             var posMin = array[key].min;
             var posMax = array[key].max;
 
+
+
+
             // Offset
             // Seems to keep you from going partially through
             // fx *= 2;
             // fy *= 2;
             // fz *= 2;
 
-            // posMin = vec3(posMin[0] + fx, posMin[1] + fy, posMin[2] + fz);  // Future Position
-            // posMax = vec3(posMax[0] + fx, posMax[1] + fy, posMax[2] + fz);  // Future Position
-
-
+            // Check Current spot & where we are moving to
             var results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [posMin, posMax]);
+            if (!results){
+                posMin = vec3(posMin[0] + fx, posMin[1] + fy, posMin[2] + fz);  // Future Position
+                posMax = vec3(posMax[0] + fx, posMax[1] + fy, posMax[2] + fz);  // Future Position
+                results = aabb_boundingBox_detection([heroPosition.min, heroPosition.max], [posMin, posMax]);
+            }
+            // console.log("Close");
+            // console.log("position Data");
+            // console.log(posMin);
+            // console.log(posMax);
+            // console.log("Car Pos");
+            // console.log(heroPosition.min);
+            // console.log(heroPosition.max);
+
+
             if (results) {
 
                 // Working on Ramp Enterence
@@ -64,7 +78,7 @@ function collisionDetection(fx, fy, fz) {
 
 
                 document.getElementById("crashSound").play();
-                console.log("True");
+                // console.log("True");
                 return true;
             }
         }

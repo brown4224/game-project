@@ -50,13 +50,13 @@ function boundingBox(id, corners) {
     this.rampEnterpt2 = vec3();
     this.corners = [vec4(-1, -0.75, -1, 1.0), vec4(1, 0.75, 1, 1.0)];  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
     this.rampEnterCorner = [vec4(1, -0.75, 1, 1.0), vec4(1, -0.75, -1, 1.0)];  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
+    this.orginDistance = 99;
 
     // this.corners = corners;  // Array:  [ vec4: minCorner,  vec4: maxCorner ] before transformation
-    this.orginDistance = 99;
     // this.rampEnterCorner = [new vec4(corners[1][0], corners[0][1], corners[1][2], 1), new vec4(corners[1][0], corners[0][1], corners[0][2], 1)]
-    console.log("Ramp Enter");
-    console.log(this.rampEnterCorner);
-    console.log(this.corners);
+    // console.log("Ramp Enter");
+    // console.log(this.rampEnterCorner);
+    // console.log(this.corners);
 
 }
 
